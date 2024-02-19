@@ -1,0 +1,15 @@
+{
+  "name": "com.mineant.minthelper",
+  "version": "0.0.1",
+  "displayName": "Mint Helper",
+  "description": "This package has scripts created by Mineant that are useful for all projects",
+  "unity": "2019.1",
+  "unityRelease": "0b5",
+  "author": {
+    "name": "Mineant",
+    "email": "kawaiianthony@gmail.com"
+  },
+  "dependencies": {
+    "com.unity.textmeshpro": ""
+  }
+}
