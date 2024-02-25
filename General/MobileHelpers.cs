@@ -18,7 +18,7 @@ namespace Mineant
         /// </summary>
         public static int GetKeyboardHeight(bool includeInput)
         {
-#if UNITY_ANDROID
+#if UNITY_ANDROID && !UNITY_EDITOR
         using (var unityClass = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
         {
             var unityPlayer = unityClass.GetStatic<AndroidJavaObject>("currentActivity").Get<AndroidJavaObject>("mUnityPlayer");
