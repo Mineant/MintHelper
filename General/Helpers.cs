@@ -15,6 +15,22 @@ namespace Mineant
 {
     public static class Helpers
     {
+
+
+
+
+
+
+        public static void SmartAddRange<T>(this List<T> target, List<T> collection)
+        {
+            if (collection == null || collection.Count == 0) return;
+
+            target.AddRange(collection);
+        }
+
+
+
+
         public enum TimeSpanToStringType { Default }
         public static string TimeSpanToReadableString(TimeSpan timeSpan, TimeSpanToStringType type = TimeSpanToStringType.Default)
         {
