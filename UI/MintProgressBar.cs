@@ -9,6 +9,8 @@ namespace Mineant
 {
     public class MintProgressBar : MonoBehaviour
     {
+        public enum TextField { All, Fraction, Absolute, Percentage }
+
         [Header("Basic")]
         public Image ForegroundImage;
 
@@ -52,7 +54,7 @@ namespace Mineant
         {
             float adjustedCurrent = current - min;
             float adjustedMax = max - min;
-            if(_previousCurrentValue == Mathf.NegativeInfinity) _previousCurrentValue = adjustedCurrent;
+            if (_previousCurrentValue == Mathf.NegativeInfinity) _previousCurrentValue = adjustedCurrent;
 
             bool usedDotween = false;
 
@@ -97,6 +99,27 @@ namespace Mineant
         }
 
         public void SetValue(float current, float max) => SetValue(current, 0f, max);
+
+        public void SetTextFieldActive(bool active, TextField textField)
+        {
+            switch (textField)
+            {
+                case (TextField.All):
+                    if (FractionValueText != null) FractionValueText.gameObject.SetActive(active);
+                    if (PercentageValueText != null) PercentageValueText.gameObject.SetActive(active);
+                    if (AbsoluteValueText != null) AbsoluteValueText.gameObject.SetActive(active);
+                    break;
+                case (TextField.Absolute):
+                    if (AbsoluteValueText != null) AbsoluteValueText.gameObject.SetActive(active);
+                    break;
+                case (TextField.Percentage):
+                    if (PercentageValueText != null) PercentageValueText.gameObject.SetActive(active);
+                    break;
+                case (TextField.Fraction):
+                    if (FractionValueText != null) FractionValueText.gameObject.SetActive(active);
+                    break;
+            }
+        }
 
     }
 
