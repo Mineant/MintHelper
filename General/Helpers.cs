@@ -21,7 +21,7 @@ namespace Mineant
 
 
 
-        public static void SmartAddRange<T>(this List<T> target, List<T> collection)
+        public static void SmartAddRange<T>(this List<T> target, IList<T> collection)
         {
             if (collection == null || collection.Count == 0) return;
 
