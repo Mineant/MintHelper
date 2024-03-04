@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using MoreMountains.Tools;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using System.Linq;
 
 namespace Mineant.Currency
 {
@@ -73,6 +74,10 @@ namespace Mineant.Currency
         {
             return _currencyTable[currencyType] >= amount;
         }
+
+
+
+        public CurrencyType GetCurrencyType(string name) => CurrencyTypes.First(c => c.name == name);
     }
 
     [System.Serializable]
