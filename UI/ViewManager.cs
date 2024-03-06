@@ -10,6 +10,7 @@ namespace Mineant
         Additive,
     }
 
+    [DefaultExecutionOrder(-100)]
     public sealed class ViewManager : MonoBehaviour
     {
         public static ViewManager Instance { get; private set; }
