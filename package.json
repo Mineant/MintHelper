@@ -1,6 +1,6 @@
 {
   "name": "com.mineant.minthelper",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "displayName": "Mint Helper",
   "description": "This package has scripts created by Mineant that are useful for all projects",
   "unity": "2019.1",
