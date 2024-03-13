@@ -74,7 +74,7 @@ namespace Mineant
             }
 
 
-            _createProducts = new();
+            _createProducts = new List<TProduct>();
             if (AddExistingProducts)
             {
                 foreach (Transform child in ProductLocation.transform)

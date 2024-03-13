@@ -44,7 +44,7 @@ namespace Mineant
         {
             if (_statAndCharacterStats.TryGetValue(stat, out var characterStat1)) return characterStat1;
 
-            CharacterStat characterStat = new(baseValue);
+            CharacterStat characterStat = new CharacterStat(baseValue);
             _statAndCharacterStats[stat] = characterStat;
             return characterStat;
         }

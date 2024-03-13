@@ -129,7 +129,7 @@ namespace Mineant
         /// </summary>
         public virtual List<T> GetLoots(int count)
         {
-            List<T> loots = new();
+            List<T> loots = new List<T>();
             for (int i = 0; i < count; i++)
             {
                 loots.Add(GetLoot());
