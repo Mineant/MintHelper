@@ -3,14 +3,18 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using DG.Tweening;
-using DG.Tweening.Core;
-using DG.Tweening.Plugins.Options;
-using MoreMountains.Tools;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
+
+#if DOTWEEN
+using DG.Tweening;
+using DG.Tweening.Core;
+using DG.Tweening.Plugins.Options;
+#endif
+
+using MoreMountains.Tools;
 namespace Mineant
 {
     public static class Helpers
@@ -49,6 +53,7 @@ namespace Mineant
             return msg;
         }
 
+#if DOTWEEN
         public static TweenerCore<Vector3, Vector3, VectorOptions> DOMoveInTargetLocalSpace(this Transform transform, Transform target, Vector3 targetLocalEndPosition, float duration)
         {
             var t = DOTween.To(
@@ -59,7 +64,7 @@ namespace Mineant
             t.SetTarget(transform);
             return t;
         }
-
+#endif
         public static TEnum GetRandomEnum<TEnum>() where TEnum : System.Enum
         {
             Array values = Enum.GetValues(typeof(TEnum));
