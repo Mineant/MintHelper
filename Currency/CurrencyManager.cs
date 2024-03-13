@@ -2,9 +2,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using MoreMountains.Tools;
-using Sirenix.OdinInspector;
 using UnityEngine;
 using System.Linq;
+#if ODIN_INSPECTOR
+using Sirenix.OdinInspector;
+#endif
 
 namespace Mineant.Currency
 {
@@ -22,7 +24,10 @@ namespace Mineant.Currency
         [Range(0f, 999f)]
         public int DebugCurrencyAmount;
 
+#if ODIN_INSPECTOR
         [Button]
+#endif
+        [ContextMenu("Debug Change Currency")]
         void DebugChangeCurrency() => ChangeCurrency(DebugCurrencyType, DebugCurrencyAmount);
 
         private Dictionary<CurrencyType, int> _currencyTable = new Dictionary<CurrencyType, int>();

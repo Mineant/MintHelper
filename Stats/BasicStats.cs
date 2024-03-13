@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using Mineant;
-using Sirenix.OdinInspector;
 using UnityEngine;
+#if ODIN_INSPECTOR
+using Sirenix.OdinInspector;
+#endif
 
 namespace Mineant
 {
@@ -11,8 +13,9 @@ namespace Mineant
     {
         public StatDictionaryAllInOne StatDictionaryAllInOne;
 
-
+        #if ODIN_INSPECTOR
         [Button]
+        #endif
         protected void AddSkillStats()
         {
             // if (!StatDictionaryAllInOne.IsAllEmpty())
@@ -46,7 +49,9 @@ namespace Mineant
             // StatDictionaryAllInOne.BaseValueStatDictionary = baseDict;
         }
 
+        #if ODIN_INSPECTOR
         [Button]
+        #endif
         public void GenerateSkillBookStats()
         {
             if (!StatDictionaryAllInOne.IsAllEmpty())
@@ -67,7 +72,9 @@ namespace Mineant
             StatDictionaryAllInOne.FlatModifierStatDictionary = flatDict;
         }
 
+        #if ODIN_INSPECTOR
         [Button]
+        #endif
         protected void GenerateEnemyStats()
         {
             if (!StatDictionaryAllInOne.IsAllEmpty())
