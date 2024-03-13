@@ -173,7 +173,7 @@ namespace Mineant
         /// </summary>
         public static List<int> ContainsSubList(List<string> masterList, List<string> subList, string bannedPreElement, string bannedPostElement, string masterElement = "")
         {
-            List<int> subListHeader = new();
+            List<int> subListHeader = new List<int>();
             for (int i = 0; i <= masterList.Count - subList.Count; i++)
             {
 

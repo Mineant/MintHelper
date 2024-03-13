@@ -10,7 +10,7 @@ namespace Mineant
     {
         public TMP_Text Text;
 
-        private Dictionary<int, string> CachedNumberStrings = new();
+        private Dictionary<int, string> CachedNumberStrings = new Dictionary<int, string>();
         private int[] _frameRateSamples;
         private int _cacheNumbersAmount = 300;
         private int _averageFromAmount = 30;

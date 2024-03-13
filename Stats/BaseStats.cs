@@ -18,7 +18,7 @@ namespace Mineant
 
         void Awake()
         {
-            _statAndCharacterStats = new();
+            _statAndCharacterStats = new Dictionary<Stat, CharacterStat>();
             foreach (var keyValuePair in BasicStats.StatDictionaryAllInOne.BaseValueStatDictionary)
             {
                 InitializeStat(keyValuePair.Key, keyValuePair.Value);
@@ -38,8 +38,6 @@ namespace Mineant
             {
                 AddModifier(keyValuePair.Key, new StatModifier(keyValuePair.Value, StatModType.PercentMult));
             }
-
-            // _value = new();
         }
 
         public CharacterStat InitializeStat(Stat stat, float baseValue = 0f)

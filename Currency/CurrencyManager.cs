@@ -32,7 +32,7 @@ namespace Mineant.Currency
             base.Awake();
 
             // Initialize the dictionary
-            _currencyTable = new();
+            _currencyTable = new Dictionary<CurrencyType, int>();
             foreach (CurrencyType currencyType in CurrencyTypes)
             {
                 SetCurrency(currencyType, 0);

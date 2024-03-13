@@ -112,7 +112,7 @@ namespace Mineant
 
         public virtual void AddLoot(T loot)
         {
-            if (ObjectsToLoot == null) ObjectsToLoot = new();
+            if (ObjectsToLoot == null) ObjectsToLoot = new List<T>();
             ObjectsToLoot.Add(loot);
             ComputeWeights();
         }
