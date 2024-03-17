@@ -8,9 +8,11 @@ using System.Linq;
 using Sirenix.OdinInspector;
 #endif
 
+#if MOREMOUNTAINS_NICEVIBRATIONS_INSTALLED
+
 namespace Mineant.Currency
 {
-
+    [DefaultExecutionOrder(-100)]
     public class CurrencyManager : MMPersistentSingleton<CurrencyManager>
     {
         [Header("Currency Manager")]
@@ -130,3 +132,5 @@ namespace Mineant.Currency
         }
     }
 }
+
+#endif

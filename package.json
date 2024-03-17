@@ -1,6 +1,6 @@
 {
   "name": "com.mineant.minthelper",
-  "version": "0.0.8",
+  "version": "0.0.10",
   "displayName": "Mint Helper",
   "description": "This package has scripts created by Mineant that are useful for all projects",
   "unity": "2019.1",
@@ -10,6 +10,7 @@
     "email": "kawaiianthony@gmail.com"
   },
   "dependencies": {
-    "com.unity.textmeshpro": ""
+    "com.unity.textmeshpro": "",
+    "com.coffee.ui-particle": ""
   }
 }

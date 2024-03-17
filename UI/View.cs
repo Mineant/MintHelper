@@ -10,8 +10,11 @@ namespace Mineant
     public abstract class View : MonoBehaviour
     {
         public bool HideWithCanvas;
+
+#if MOREMOUNTAINS_NICEVIBRATIONS_INSTALLED
         public MMF_Player OnShowFeedbacks;
         public MMF_Player OnHideFeedbacks;
+#endif
 
         public bool IsInitialized { get; private set; }
         public Action OnHide;
@@ -58,13 +61,16 @@ namespace Mineant
                 _canvasGroup.blocksRaycasts = true;
 
             // if (_graphicRaycaster != null)
-                // _graphicRaycaster.enabled = true;
+            // _graphicRaycaster.enabled = true;
 
             gameObject.SetActive(true);
             if (_canvas) _canvas.enabled = true;
 
             if (OnShow != null) OnShow.Invoke();
+
+#if MOREMOUNTAINS_NICEVIBRATIONS_INSTALLED
             if (OnShowFeedbacks != null) OnShowFeedbacks.PlayFeedbacks();
+#endif
         }
 
         public virtual void Hide()
@@ -76,7 +82,7 @@ namespace Mineant
                 _canvasGroup.blocksRaycasts = false;
 
             // if (_graphicRaycaster != null)
-                // _graphicRaycaster.enabled = false;
+            // _graphicRaycaster.enabled = false;
 
             if (HideWithCanvas)
             {
@@ -94,7 +100,10 @@ namespace Mineant
 
 
             if (OnHide != null) OnHide.Invoke();
+
+#if MOREMOUNTAINS_NICEVIBRATIONS_INSTALLED
             if (OnHideFeedbacks != null) OnHideFeedbacks.PlayFeedbacks();
+#endif
         }
 
         private bool HaveCanvas()

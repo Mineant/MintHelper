@@ -1,10 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
-using MoreMountains.Tools;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+
+using MoreMountains.Tools;
+
+#if MOREMOUNTAINS_NICEVIBRATIONS_INSTALLED
 namespace Mineant.Currency
 {
     public class CurrencyDisplay : MonoBehaviour, MMEventListener<CurrencyEvent>
@@ -56,3 +59,4 @@ namespace Mineant.Currency
     }
 
 }
+#endif
