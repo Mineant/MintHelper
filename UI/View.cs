@@ -1,8 +1,12 @@
 using System;
-using MoreMountains.Feedbacks;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+
+
+#if MOREMOUNTAINS_NICEVIBRATIONS_INSTALLED
+using MoreMountains.Feedbacks;
+#endif
 
 namespace Mineant
 {

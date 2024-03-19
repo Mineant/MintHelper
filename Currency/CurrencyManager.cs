@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using MoreMountains.Tools;
 using UnityEngine;
 using System.Linq;
 #if ODIN_INSPECTOR
@@ -9,6 +8,7 @@ using Sirenix.OdinInspector;
 #endif
 
 #if MOREMOUNTAINS_NICEVIBRATIONS_INSTALLED
+using MoreMountains.Tools;
 
 namespace Mineant.Currency
 {

@@ -5,9 +5,10 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
-using MoreMountains.Tools;
 
 #if MOREMOUNTAINS_NICEVIBRATIONS_INSTALLED
+using MoreMountains.Tools;
+
 namespace Mineant.Currency
 {
     public class CurrencyDisplay : MonoBehaviour, MMEventListener<CurrencyEvent>
