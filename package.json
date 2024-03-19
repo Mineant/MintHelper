@@ -5,6 +5,7 @@
   "description": "This package has scripts created by Mineant that are useful for all projects",
   "unity": "2019.1",
   "unityRelease": "0b5",
+  "changelogUrl": "https://github.com/Mineant/MintHelper/blob/main/CHANGELOG.md",
   "author": {
     "name": "Mineant",
     "email": "kawaiianthony@gmail.com"
