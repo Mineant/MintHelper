@@ -7,13 +7,12 @@ using UnityEngine;
 
 namespace Mineant.TwoD
 {
-    [RequireComponent(typeof(SpriteRenderer))]
     public class SpriteAnimator : MonoBehaviour
     {
+        public SpriteRenderer SpriteRenderer;
         public string DefaultAnimation;
         public List<SpriteAnimationClip> Clips;
 
-        private SpriteRenderer _spriteRenderer;
         private Coroutine _animationCoroutine;  // Used to animate the sprite renderer
 
         [Header("Debug")]
@@ -27,7 +26,7 @@ namespace Mineant.TwoD
 
         void Awake()
         {
-            _spriteRenderer = GetComponent<SpriteRenderer>();
+            SpriteRenderer = GetComponent<SpriteRenderer>();
         }
 
         void Start()
@@ -60,7 +59,7 @@ namespace Mineant.TwoD
                 float startTime = Time.time;
                 for (int i = 0; i < clip.Sprites.Count; i++)
                 {
-                    _spriteRenderer.sprite = clip.Sprites[i];
+                    SpriteRenderer.sprite = clip.Sprites[i];
 
                     // When not time to the next sprite animation frame, just wait.
                     do
