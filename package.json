@@ -11,6 +11,6 @@
   },
   "dependencies": {
     "com.unity.textmeshpro": "",
-    "com.v0lt.editor-attributes": ""
+    "com.v0lt.editor-attributes": "https://github.com/v0lt13/EditorAttributes.git"
   }
 }
