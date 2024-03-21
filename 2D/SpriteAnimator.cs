@@ -24,10 +24,6 @@ namespace Mineant.TwoD
             Play(DebugAnimation);
         }
 
-        void Awake()
-        {
-            SpriteRenderer = GetComponent<SpriteRenderer>();
-        }
 
         void Start()
         {
