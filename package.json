@@ -10,6 +10,7 @@
     "email": "kawaiianthony@gmail.com"
   },
   "dependencies": {
-    "com.unity.textmeshpro": ""
+    "com.unity.textmeshpro": "",
+    "com.v0lt.editor-attributes": ""
   }
 }
