@@ -63,6 +63,22 @@ namespace Mineant.TwoD
                         yield return null;
                     } while (Time.time < startTime + interval * (i + 1));
                 }
+
+                // Pingpong reverse loop
+                if (clip.LoopMode == SpriteAnimationClip.LoopModes.PingPong)
+                {
+                    startTime = Time.time;
+                    for (int i = clip.Sprites.Count - 2; i > 0; i--)
+                    {
+                        SpriteRenderer.sprite = clip.Sprites[i];
+
+                        // When not time to the next sprite animation frame, just wait.
+                        do
+                        {
+                            yield return null;
+                        } while (Time.time < startTime + interval * (clip.Sprites.Count - i - 1));
+                    }
+                }
             } while (clip.Loop);
 
             if (clip.ReturnDefault) Play(DefaultAnimation);
@@ -78,8 +94,10 @@ namespace Mineant.TwoD
     [System.Serializable]
     public class SpriteAnimationClip
     {
+        public enum LoopModes { Restart, PingPong }
         public string Name;
         public bool Loop = false;
+        public LoopModes LoopMode;
         public int FrameRate = 12;
 
         [Tooltip("After finishing this animation, will it return to the default animation from the sprite animator?")]
