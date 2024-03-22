@@ -22,15 +22,16 @@ namespace Mineant
         [Tooltip("The product the pool")]
         public TProduct ProductPrefab;
 
-        public int DefaultSize = 20;
+        public int DefaultSize = 0;
 
         [Tooltip("Destroys the gameObjects under the targetted transform.")]
-        public bool DestroyOnStart = false;
+        public bool DestroyOnStart = true;
 
-        public bool AutoUpdateLayout;
+        [Tooltip("Add products under the container at start to created products.")]
         public bool AddExistingProducts;
+        public bool AutoUpdateLayout;
 
-        [Header("Helperful")]
+        [Header("Advanced")]
         [Tooltip("if a toggle group can be found on this object, then if products hv toggle group, will automatically assign.")]
         public bool AutoSetProductToggleGroup;
 
@@ -40,31 +41,22 @@ namespace Mineant
         [Tooltip("If other scripts will reorder the products inside this container, for example, moave the products to another parent, or change the sibling index, enabling this will reorder the products, so get active products will get the products correctly by their index.")]
         public bool AutoReorderProducts;
 
-        // public List<TProduct> CreatedProducts
-        // {
-        //     get
-        //     { return _createProducts; }
-        //     set
-        //     {
-        //         _createProducts = value;
-        //     }
-        // }
-
         protected List<TProduct> _createProducts;
 
         protected TProduct _createdProduct;
-        protected LayoutGroup _layoutGroup;
         private int _containerUpdated = 0;
         public static int LAYOUT_UPDATE_FRAMES = 5;
+        public LayoutGroup LayoutGroup { get; protected set; }
         public ToggleGroup ToggleGroup { get; protected set; }
 
 
         void Awake()
         {
-            _layoutGroup = ProductLocation.GetComponent<LayoutGroup>();
+            LayoutGroup = ProductLocation.GetComponent<LayoutGroup>();
             ToggleGroup = GetComponent<ToggleGroup>();
             if (AutoSetProductToggleGroup && ToggleGroup == null) Debug.LogError("Cannot auto set toggle group if no toggle grup at container.");
             if (ProductLocation == null) ProductLocation = this.transform;
+            if (DestroyOnStart & AddExistingProducts) Debug.LogError("Cannot destroy existing products while trying to add existing products.");
             if (DestroyOnStart)
             {
                 foreach (Transform child in ProductLocation)
@@ -84,11 +76,11 @@ namespace Mineant
             }
 
             CreatePool();
-
         }
 
         void LateUpdate()
         {
+            // Update the container.
             if (_containerUpdated > 0)
             {
                 _containerUpdated--;
@@ -187,6 +179,10 @@ namespace Mineant
             if (OnContentChanged != null) OnContentChanged.Invoke();
         }
 
+        /// <summary>
+        /// This is very costly to do. Cache it. Do not do it every frame.
+        /// </summary>
+        /// <returns></returns>
         public List<TProduct> GetActiveProducts()
         {
             if (AutoReorderProducts) ReorderCreatedProducts();
@@ -206,8 +202,8 @@ namespace Mineant
         /// </summary>
         public void UpdateLayoutGroup()
         {
-            if (_layoutGroup == null) return;
-            LayoutRebuilder.ForceRebuildLayoutImmediate(_layoutGroup.transform as RectTransform);
+            if (LayoutGroup == null) return;
+            LayoutRebuilder.ForceRebuildLayoutImmediate(LayoutGroup.transform as RectTransform);
         }
     }
 
