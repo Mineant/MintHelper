@@ -29,46 +29,6 @@ namespace Mineant
         #endregion
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         #region List Extensions
         /// <summary>
         /// Checks whether the list.AddRange(source) source is null or the collection is 0 count.
@@ -78,9 +38,23 @@ namespace Mineant
         /// <param name="collection"></param>
         public static void SmartAddRange<T>(this List<T> target, IList<T> collection)
         {
+            if (target == null) return;
             if (collection == null || collection.Count == 0) return;
 
             target.AddRange(collection);
+        }
+
+        /// <summary>
+        /// List.Add but check item and target is null or not.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="target"></param>
+        /// <param name="item"></param>
+        public static void SmartAdd<T>(this List<T> target, T item)
+        {
+            if (target == null) return;
+            if (item == null ) return;
+            target.Add(item);
         }
 
 
