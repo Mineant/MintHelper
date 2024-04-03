@@ -540,7 +540,7 @@ namespace Mineant
         /// Gets all event systen raycast results of current mouse or touch position.
         /// </summary>
         /// <returns></returns>
-        static List<RaycastResult> GetEventSystemRaycastResults()
+        public static List<RaycastResult> GetEventSystemRaycastResults()
         {
             PointerEventData eventData = new PointerEventData(EventSystem.current);
             eventData.position = Input.mousePosition;
