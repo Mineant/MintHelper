@@ -1,9 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-#if ODIN_INSPECTOR
-using Sirenix.OdinInspector;
-#endif
+
 
 namespace Mineant
 {
@@ -24,9 +22,6 @@ namespace Mineant
         protected bool _weightsComputed = false;
 
 
-        #if ODIN_INSPECTOR
-        [Button]
-        #endif
         [ContextMenu("Debug Conpute Weights")]
         public virtual void DebugComputeWeights()
         {

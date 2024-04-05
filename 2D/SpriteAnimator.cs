@@ -1,9 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using EditorAttributes;
-using UnityEditor.Rendering;
 using UnityEngine;
+
 
 namespace Mineant.TwoD
 {
@@ -18,7 +17,7 @@ namespace Mineant.TwoD
         [Header("Debug")]
         public string DebugAnimation;
 
-        [Button]
+        [ContextMenu("DebugPlayAnimation")]
         void DebugPlayAnimation()
         {
             Play(DebugAnimation);

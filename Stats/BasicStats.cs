@@ -13,9 +13,7 @@ namespace Mineant
     {
         public StatDictionaryAllInOne StatDictionaryAllInOne;
 
-        #if ODIN_INSPECTOR
-        [Button]
-        #endif
+        [ContextMenu("AddSkillStats")]
         protected void AddSkillStats()
         {
             // if (!StatDictionaryAllInOne.IsAllEmpty())
@@ -49,9 +47,7 @@ namespace Mineant
             // StatDictionaryAllInOne.BaseValueStatDictionary = baseDict;
         }
 
-        #if ODIN_INSPECTOR
-        [Button]
-        #endif
+        [ContextMenu("GenerateSkillBookStats")]
         public void GenerateSkillBookStats()
         {
             if (!StatDictionaryAllInOne.IsAllEmpty())
@@ -72,9 +68,7 @@ namespace Mineant
             StatDictionaryAllInOne.FlatModifierStatDictionary = flatDict;
         }
 
-        #if ODIN_INSPECTOR
-        [Button]
-        #endif
+        [ContextMenu("GenerateEnemyStats")]
         protected void GenerateEnemyStats()
         {
             if (!StatDictionaryAllInOne.IsAllEmpty())

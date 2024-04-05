@@ -1,8 +1,8 @@
 {
   "name": "com.mineant.minthelper",
-  "version": "0.0.11",
+  "version": "0.0.12",
   "displayName": "Mint Helper",
-  "description": "DEPENDENCIES (Must Install)\nhttps://github.com/v0lt13/EditorAttributes.git\n\nABOUT\nThis package has scripts created by Mineant that are useful for all projects",
+  "description": "USEFUL PACKAGES (Recommend to install)\nhttps://github.com/v0lt13/EditorAttributes.git\n\nABOUT\nThis package has scripts created by Mineant that are useful for all projects",
   "unity": "2019.1",
   "unityRelease": "0b5",
   "author": {
