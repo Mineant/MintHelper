@@ -171,6 +171,8 @@ namespace Bobbin
                 }
             }
 
+            Debug.Log(lastReport);
+
             EditorUtility.SetDirty(BobbinSettings.Instance);
             refreshInProgress = false;
         }
