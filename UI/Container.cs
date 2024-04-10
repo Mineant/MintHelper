@@ -159,14 +159,18 @@ namespace Mineant
         /// <summary>
         /// Hides all previous products and generates completely new ones with the args.
         /// </summary>
-        public void NewProductBatch(IEnumerable<TArgs> argsList)
+        public List<TProduct> SetProducts(IEnumerable<TArgs> argsList)
         {
+            List<TProduct> products = new();
+
             DestroyAllProducts();
 
             foreach (TArgs args in argsList)
             {
-                GenerateNewProduct(args);
+                products.Add(GenerateNewProduct(args));
             }
+
+            return products;
         }
 
         public virtual void DestroyAllProducts()

@@ -50,8 +50,12 @@ namespace Mineant
             if (OnProductInteractorClick != null) OnProductInteractorClick.Invoke(this);
         }
 
-        public virtual void SetProductInteractorClick(Action<Product<TArgs>> onProductButtonClick)
+        /// <summary>
+        /// Use a method to wrap a click, because restrict a product to only trigger one event when click.
+        /// </summary>
+        public virtual void OnInteract(Action<Product<TArgs>> onProductButtonClick)
         {
+            if(ProductButton == null && ProductToggle == null) Debug.LogError("Product interactor cannot be null. Cannt trigger any events.");
             OnProductInteractorClick = onProductButtonClick;
         }
 
