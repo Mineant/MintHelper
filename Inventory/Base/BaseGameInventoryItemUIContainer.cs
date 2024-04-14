@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Mineant.Inventory
 {
-    public class GameInventoryItemUIContainer : Container<GameInventoryItemUIProduct, GameInventoryItemUIProductArgs>
+    public class BaseGameInventoryItemUIContainer : Container<BaseGameItemUIProduct, BaseGameItemUIProductArgs>
     {
 
     }

@@ -8,14 +8,14 @@ namespace Mineant.Inventory
     public class InventoryDisplay : MonoBehaviour
     {
         public static List<InventoryDisplay> RegisteredInventoryDisplays;
-        public GameInventoryItemUIContainer Container;
+        public BaseGameInventoryItemUIContainer Container;
 
         [Header("Listener")]
         public bool Listen;
         public string InventoryID;
         public string PlayerID;
 
-        public Inventory Inventory;
+        public BaseInventory Inventory;
 
         IEnumerator Start()
         {
@@ -25,7 +25,7 @@ namespace Mineant.Inventory
             {
                 while (true)
                 {
-                    Inventory = Inventory.FindInventory(InventoryID, PlayerID);
+                    Inventory = BaseInventory.FindInventory(InventoryID, PlayerID);
                     if (Inventory != null)
                     {
                         Generate(Inventory);
@@ -37,13 +37,13 @@ namespace Mineant.Inventory
         }
 
 
-        public void Generate(Inventory inventory)
+        public void Generate(BaseInventory inventory)
         {
             Container.DestroyAllProducts();
 
-            for (int i = 0; i < inventory.Content.Length; i++)
+            for (int i = 0; i < inventory.GetContent().Length; i++)
             {
-                GameInventoryItemUIProduct product = Container.GenerateNewProduct(new GameInventoryItemUIProductArgs(inventory.Content[i], i, this));
+                BaseGameItemUIProduct product = Container.GenerateNewProduct(new BaseGameItemUIProductArgs(inventory.GetContent()[i], i, this));
             }
 
         }

@@ -6,11 +6,17 @@ using System;
 
 namespace Mineant.Inventory
 {
-    public class Inventory : MonoBehaviour
+    public abstract class BaseInventory : MonoBehaviour
     {
-        public static List<Inventory> RegisteredInventories;
+        public static List<BaseInventory> RegisteredInventories;
 
-        public static Inventory FindInventory(string inventoryName, string playerID)
+        [Tooltip("Used by inventory display")]
+        public string InventoryID;
+
+        [Tooltip("the owner of this inventory")]
+        public string PlayerID;
+
+        public static BaseInventory FindInventory(string inventoryName, string playerID)
         {
             if (inventoryName == null)
             {
@@ -19,7 +25,7 @@ namespace Mineant.Inventory
 
             if (RegisteredInventories == null) return null;
 
-            foreach (Inventory inventory in RegisteredInventories)
+            foreach (BaseInventory inventory in RegisteredInventories)
             {
                 if (inventory.InventoryID == inventoryName && inventory.PlayerID == playerID)
                 {
@@ -29,17 +35,22 @@ namespace Mineant.Inventory
             return null;
         }
 
+        public abstract BaseGameItem[] GetContent();
+        public abstract bool AddItem(BaseGameItem itemToAdd);
+        public abstract bool AddItemAt(BaseGameItem itemToAdd, int index);
+        public abstract bool RemoveItem(BaseGameItem itemToRemove);
+        public abstract bool MoveItem(int start, int end);
+    }
 
-        [Tooltip("Used by inventory display")]
-        public string InventoryID;
 
-        [Tooltip("the owner of this inventory")]
-        public string PlayerID;
-        public GameInventoryItem[] Content;
+    public abstract class BaseInventory<TGameItem> : BaseInventory where TGameItem : BaseGameItem
+    {
+        [SerializeField]
+        protected TGameItem[] _content;
 
 
         #region 狀態
-        public virtual int NumberOfFreeSlots => Content.Length - NumberOfFilledSlots;
+        public virtual int NumberOfFreeSlots => _content.Length - NumberOfFilledSlots;
 
         /// whether or not the inventory is full (doesn't have any remaining free slots)
         public virtual bool IsFull => NumberOfFreeSlots <= 0;
@@ -50,9 +61,9 @@ namespace Mineant.Inventory
             get
             {
                 int numberOfFilledSlots = 0;
-                for (int i = 0; i < Content.Length; i++)
+                for (int i = 0; i < _content.Length; i++)
                 {
-                    if (!Content[i].IsNull())
+                    if (!_content[i].IsNull())
                     {
                         numberOfFilledSlots++;
                     }
@@ -63,15 +74,20 @@ namespace Mineant.Inventory
         #endregion
 
 
+        public override BaseGameItem[] GetContent()
+        {
+            return _content;
+        }
+
         public void Initialize(int size)
         {
             // Should set the maximum size, etc....
-            Content = new GameInventoryItem[size];
+            _content = new TGameItem[size];
 
             // Register inventory
             if (RegisteredInventories == null)
             {
-                RegisteredInventories = new List<Inventory>();
+                RegisteredInventories = new List<BaseInventory>();
             }
             if (RegisteredInventories.Count > 0)
             {
@@ -95,16 +111,16 @@ namespace Mineant.Inventory
         /// </summary>
         /// <returns><c>true</c>, if item was added, <c>false</c> if it couldn't be added (item null, inventory full).</returns>
         /// <param name="itemToAdd">Item to add.</param>
-        public virtual bool AddItem(GameInventoryItem itemToAdd)
+        public override bool AddItem(BaseGameItem itemToAdd)
         {
             if (itemToAdd.IsNull()) return false;
             if (IsFull) return false;
 
             // FInd empty index
             int index = -1;
-            for (int i = 0; i < Content.Length; i++)
+            for (int i = 0; i < _content.Length; i++)
             {
-                if (Content[i].IsNull())
+                if (_content[i].IsNull())
                 {
                     index = i;
                     break;
@@ -121,13 +137,13 @@ namespace Mineant.Inventory
         /// <param name="quantity"></param>
         /// <param name="destinationIndex"></param>
         /// <returns></returns>
-        public virtual bool AddItemAt(GameInventoryItem itemToAdd, int destinationIndex)
+        public override bool AddItemAt(BaseGameItem itemToAdd, int destinationIndex)
         {
             if (itemToAdd.IsNull()) return false;
             if (IsFull) return false;
-            if (!Content[destinationIndex].IsNull()) return false;
+            if (!_content[destinationIndex].IsNull()) return false;
 
-            Content[destinationIndex] = itemToAdd;
+            _content[destinationIndex] = (TGameItem)itemToAdd;
             UpdateInventoryUI();
 
             return true;
@@ -139,14 +155,14 @@ namespace Mineant.Inventory
         /// <returns><c>true</c>, if item was moved, <c>false</c> otherwise.</returns>
         /// <param name="startIndex">Start index.</param>
         /// <param name="endIndex">End index.</param>
-        public virtual bool MoveItem(int startIndex, int endIndex)
+        public override bool MoveItem(int startIndex, int endIndex)
         {
-            if (Content[startIndex].IsNull()) return false;
+            if (_content[startIndex].IsNull()) return false;
 
-            GameInventoryItem startItem = Content[startIndex];
-            GameInventoryItem endItem = Content[endIndex];
-            Content[startIndex] = endItem;
-            Content[endIndex] = startItem;
+            TGameItem startItem = _content[startIndex];
+            TGameItem endItem = _content[endIndex];
+            _content[startIndex] = endItem;
+            _content[endIndex] = startItem;
 
             UpdateInventoryUI();
 
@@ -160,12 +176,12 @@ namespace Mineant.Inventory
         /// <param name="targetInventory"></param>
         /// <param name="endIndex"></param>
         /// <returns></returns>
-        public virtual bool MoveItemToInventory(int startIndex, Inventory targetInventory, int endIndex = -1)
+        public virtual bool MoveItemToInventory(int startIndex, BaseInventory targetInventory, int endIndex = -1)
         {
-            if (Content[startIndex].IsNull()) return false;
-            if (endIndex >= 0 && !targetInventory.Content[endIndex].IsNull()) return false;
+            if (_content[startIndex].IsNull()) return false;
+            if (endIndex >= 0 && !targetInventory.GetContent()[endIndex].IsNull()) return false;
 
-            GameInventoryItem itemToMove = Content[startIndex];
+            TGameItem itemToMove = _content[startIndex];
 
             // if we've specified a destination index, we use it, otherwise we add normally
             if (endIndex >= 0)
@@ -190,20 +206,20 @@ namespace Mineant.Inventory
         /// <param name="itemToRemove">Item to remove.</param>
         public virtual bool RemoveItem(int i)
         {
-            if (i < 0 || i >= Content.Length) return false;
-            if (Content[i].IsNull()) return false;
+            if (i < 0 || i >= _content.Length) return false;
+            if (_content[i].IsNull()) return false;
 
-            Content[i] = null;
+            _content[i] = null;
             UpdateInventoryUI();
 
             return true;
         }
 
-        public virtual bool RemoveItem(GameInventoryItem item)
+        public override bool RemoveItem(BaseGameItem item)
         {
             if (item.IsNull()) return false;
 
-            int index = Array.IndexOf(Content, item);
+            int index = Array.IndexOf(_content, item);
             return RemoveItem(index);
         }
 
@@ -230,7 +246,7 @@ namespace Mineant.Inventory
         /// <param name="i">The index.</param>
         public virtual bool DestroyItem(int i)
         {
-            Content[i] = null;
+            _content[i] = null;
             UpdateInventoryUI();
             return true;
         }
@@ -240,7 +256,7 @@ namespace Mineant.Inventory
         /// </summary>
         public virtual void EmptyInventory()
         {
-            Content = new GameInventoryItem[Content.Length];
+            _content = new TGameItem[_content.Length];
         }
 
 
@@ -248,11 +264,11 @@ namespace Mineant.Inventory
         {
             List<int> list = new List<int>();
 
-            for (int i = 0; i < Content.Length; i++)
+            for (int i = 0; i < _content.Length; i++)
             {
-                if (!Content[i].IsNull())
+                if (!_content[i].IsNull())
                 {
-                    if (Content[i].Parent.ItemID == searchedItemID)
+                    if (_content[i].GetParent().ItemID == searchedItemID)
                     {
                         list.Add(i);
                     }

@@ -4,14 +4,13 @@ using UnityEngine;
 
 namespace Mineant.Inventory
 {
-    [System.Serializable]
-    public class GameInventoryItem
-    {
-        public InventoryItem Parent;
 
-        public GameInventoryItem(InventoryItem item)
+
+    [System.Serializable]
+    public class GameInventoryItem : BaseGameItem<InventoryItem>
+    {
+        public GameInventoryItem(InventoryItem parent) : base(parent)
         {
-            Parent = item;
         }
     }
 }

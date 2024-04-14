@@ -7,7 +7,7 @@ namespace Mineant.Inventory
     {
         public int InventorySize;
 
-        public Inventory Inventory;
+        public GameInventory Inventory;
 
         public List<InventoryItem> DefaultItems;
 

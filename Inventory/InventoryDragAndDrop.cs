@@ -12,9 +12,9 @@ namespace Mineant.Inventory
         private GraphicRaycaster _raycaster;
         private Canvas _canvas;
         private List<RaycastResult> _raycastResults;
-        private GameInventoryItemUIProduct _slot;
-        private GameInventoryItem _item;
-        private Inventory _inventory;
+        private BaseGameItemUIProduct _slot;
+        private BaseGameItem _item;
+        private BaseInventory _inventory;
         private string _playerID;
 
         private void Awake()
@@ -35,14 +35,14 @@ namespace Mineant.Inventory
             Raycast(eventData);
             foreach (var result in _raycastResults)
             {
-                GameInventoryItemUIProduct slot = result.gameObject.GetComponent<GameInventoryItemUIProduct>();
+                BaseGameItemUIProduct slot = result.gameObject.GetComponent<BaseGameItemUIProduct>();
                 if (slot == null) continue;
-                if (slot.GameInventoryItem.IsNull()) continue;
+                if (slot.BaseGameItem.IsNull()) continue;
 
                 _slot = slot; ;
                 _inventory = _slot.InventoryDisplay.Inventory;
                 _playerID = _inventory.PlayerID;
-                _item = _inventory.Content[_slot.Index];
+                _item = _inventory.GetContent()[_slot.Index];
 
                 break;
             }
@@ -76,14 +76,14 @@ namespace Mineant.Inventory
 
             foreach (var result in _raycastResults)
             {
-                GameInventoryItemUIProduct destinationSlot = result.gameObject.GetComponent<GameInventoryItemUIProduct>();
+                BaseGameItemUIProduct destinationSlot = result.gameObject.GetComponent<BaseGameItemUIProduct>();
                 if (destinationSlot == null) continue;
-                Inventory destinationInventory = destinationSlot.InventoryDisplay.Inventory;
+                BaseInventory destinationInventory = destinationSlot.InventoryDisplay.Inventory;
 
                 // if (destinationInventory is BaseInventory baseInventory && !baseInventory.IsItemTypeAccepted(_item)) continue;
-                if (destinationInventory.Content.Length == 0) continue;
+                if (destinationInventory.GetContent().Length == 0) continue;
 
-                GameInventoryItem destinationItem = destinationInventory.Content[destinationSlot.Index];
+                BaseGameItem destinationItem = destinationInventory.GetContent()[destinationSlot.Index];
                 bool isDestinationEmpty = destinationItem.IsNull();
 
                 // Move in same inventory
@@ -98,7 +98,7 @@ namespace Mineant.Inventory
                     // Move item to empty slot
                     if (isDestinationEmpty)
                     {
-                        GameInventoryItem item = _item;
+                        BaseGameItem item = _item;
                         destinationInventory.AddItemAt(item, destinationSlot.Index);
                         _inventory.RemoveItem(item);
                     }
