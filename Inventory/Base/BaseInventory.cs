@@ -79,27 +79,10 @@ namespace Mineant.Inventory
             return _content;
         }
 
-        public void Initialize(int size)
+        public virtual void Initialize(int size)
         {
             // Should set the maximum size, etc....
             _content = new TGameItem[size];
-
-            // Register inventory
-            if (RegisteredInventories == null)
-            {
-                RegisteredInventories = new List<BaseInventory>();
-            }
-            if (RegisteredInventories.Count > 0)
-            {
-                for (int i = RegisteredInventories.Count - 1; i >= 0; i--)
-                {
-                    if (RegisteredInventories[i] == null)
-                    {
-                        RegisteredInventories.RemoveAt(i);
-                    }
-                }
-            }
-            RegisteredInventories.Add(this);
         }
 
 
@@ -277,7 +260,7 @@ namespace Mineant.Inventory
             return list;
         }
 
-        public void UpdateInventoryUI()
+        public virtual void UpdateInventoryUI()
         {
             if (InventoryDisplay.RegisteredInventoryDisplays == null) return;
 
@@ -288,6 +271,32 @@ namespace Mineant.Inventory
                     display.Generate(this);
                 }
             }
+        }
+
+        protected virtual void OnEnable()
+        {
+            // Register inventory
+            if (RegisteredInventories == null)
+            {
+                RegisteredInventories = new List<BaseInventory>();
+            }
+
+            if (RegisteredInventories.Count > 0)
+            {
+                for (int i = RegisteredInventories.Count - 1; i >= 0; i--)
+                {
+                    if (RegisteredInventories[i] == null)
+                    {
+                        RegisteredInventories.RemoveAt(i);
+                    }
+                }
+            }
+            RegisteredInventories.Add(this);
+        }
+
+        protected virtual void OnDisable()
+        {
+            RegisteredInventories.Remove(this);
         }
 
     }
