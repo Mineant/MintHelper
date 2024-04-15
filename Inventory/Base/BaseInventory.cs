@@ -16,6 +16,8 @@ namespace Mineant.Inventory
         [Tooltip("the owner of this inventory")]
         public string PlayerID;
 
+        public Action OnChange;
+
         public static BaseInventory FindInventory(string inventoryName, string playerID)
         {
             if (inventoryName == null)
@@ -278,6 +280,8 @@ namespace Mineant.Inventory
                     display.Generate(this);
                 }
             }
+
+            if (OnChange != null) OnChange.Invoke();
         }
 
         protected virtual void OnEnable()
