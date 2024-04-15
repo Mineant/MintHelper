@@ -13,7 +13,7 @@ namespace MintHelper
 {
     public class DatabaseConverterManager : MonoBehaviour
     {
-        
+
         [ContextMenu("Generate DB")]
         public void GenerateDatabase()
         {
@@ -52,6 +52,18 @@ namespace MintHelper
         {
             if (float.TryParse(s, out float result)) return result;
             return Mathf.NegativeInfinity;  // To prevent errors, see them immediately.
+        }
+
+        public static Vector2 ToVector2(this string s)
+        {
+            List<float> args = s.Split(',').Select(s => s.Trim().ToFloat()).ToList();
+            return new Vector2(args[0], args[1]);
+        }
+
+        public static Vector2 ToVector3(this string s)
+        {
+            List<float> args = s.Split(',').Select(s => s.Trim().ToFloat()).ToList();
+            return new Vector3(args[0], args[1], args[2]);
         }
     }
 }
