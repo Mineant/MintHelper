@@ -65,6 +65,27 @@ namespace MintHelper
             List<float> args = s.Split(',').Select(s => s.Trim().ToFloat()).ToList();
             return new Vector3(args[0], args[1], args[2]);
         }
+
+        /// <summary>
+        /// Parses "Health:100%" / "Attack:20.3"
+        /// Into ("Health", 100, true) / ("Attack", 20.3, false)
+        /// the bool indicates if the value is a percentage.
+        /// </summary>
+        public static (string, float, bool) ToStringValueIsPercentage(this string s)
+        {
+            List<string> args = s.Split(':').Select(s => s.Trim()).ToList();
+            string text = args[0];
+            string value = args[1];
+            bool isPercentage = false;
+
+            if (value.Last() == '%')
+            {
+                value = value.Substring(0, value.Length - 1);
+                isPercentage = true;
+            }
+
+            return (text, value.ToFloat(), isPercentage);
+        }
     }
 }
 
