@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using UnityEditor;
 
-namespace Bobbin
+namespace MintHelper
 {
 	public static class EditorCoroutineExtensions
 	{

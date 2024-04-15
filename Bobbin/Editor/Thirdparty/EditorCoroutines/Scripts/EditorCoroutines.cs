@@ -7,7 +7,7 @@ using System.Reflection;
 
 #pragma warning disable 618
 
-namespace Bobbin
+namespace MintHelper
 {
 	public class EditorCoroutines
 	{

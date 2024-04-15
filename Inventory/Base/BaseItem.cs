@@ -9,7 +9,7 @@ namespace Mineant.Inventory
         public string ItemID;
 
         public string Name;
-
+        public string Description;
         public Sprite Icon;
     }
 

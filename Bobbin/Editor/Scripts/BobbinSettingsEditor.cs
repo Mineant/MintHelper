@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEditor;
 using UnityEditor.IMGUI.Controls;
 
-namespace Bobbin
+namespace MintHelper
 {
 
     [CustomEditor(typeof(BobbinSettings))]
