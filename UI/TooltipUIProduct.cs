@@ -5,7 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Game.Core
+namespace Mineant
 {
     public class TooltipUIProduct : Product<TooltipProductArgs>
     {

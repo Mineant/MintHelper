@@ -6,7 +6,7 @@ using MoreMountains.Tools;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace Game.Core
+namespace Mineant
 {
     public class TooltipManager : MMPersistentSingleton<TooltipManager>
     {
