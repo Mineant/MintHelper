@@ -7,6 +7,11 @@ namespace Mineant.Inventory
     public abstract class BaseGameItem
     {
         public abstract BaseItem GetParent();
+        public virtual string GetDescription()
+        {
+            return "BaseGameItem Get Description No Implemented XXXXXXXXXXXX";
+        }
+
     }
 
     public abstract class BaseGameItem<TItem> : BaseGameItem where TItem : BaseItem
