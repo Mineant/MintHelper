@@ -79,6 +79,11 @@ namespace Mineant.Inventory
             return _content;
         }
 
+        public virtual TGameItem[] GetTContent()
+        {
+            return _content;
+        }
+
         public virtual void Initialize(int size)
         {
             // Should set the maximum size, etc....
