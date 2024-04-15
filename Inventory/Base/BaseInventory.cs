@@ -88,6 +88,8 @@ namespace Mineant.Inventory
         {
             // Should set the maximum size, etc....
             _content = new TGameItem[size];
+
+            UpdateInventoryUI();
         }
 
 
