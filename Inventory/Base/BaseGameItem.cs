@@ -23,5 +23,10 @@ namespace Mineant.Inventory
             return _parent;
         }
 
+        public TItem GetTParent()
+        {
+            return _parent;
+        }
+
     }
 }
