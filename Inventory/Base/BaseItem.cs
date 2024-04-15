@@ -11,6 +11,11 @@ namespace Mineant.Inventory
         public string Name;
         public string Description;
         public Sprite Icon;
+
+        public virtual string GetLongDescription()
+        {
+            return "Long Description Not Implemented XXXXXXXXXXXXX";
+        }
     }
 
 
