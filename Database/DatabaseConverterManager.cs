@@ -45,7 +45,35 @@ namespace MintHelper
                 }
                 return floats;
             }
-            return s.Split(',').Where(s => !string.IsNullOrWhiteSpace(s)).Select(s => float.Parse(s)).ToList();
+            return s.Split(seperator).Where(s => !string.IsNullOrWhiteSpace(s)).Select(s => float.Parse(s)).ToList();
+        }
+
+        public static List<string> ToStringList(this string s, char seperator = ',', int defaultLength = -1, string defaultValue = "")
+        {
+            if (string.IsNullOrWhiteSpace(s))
+            {
+                List<string> strings = new List<string>();
+                for (int i = 0; i < defaultLength; i++)
+                {
+                    strings.Add(defaultValue);
+                }
+                return strings;
+            }
+            return s.Split(seperator).Select(s => s.Trim()).ToList();
+        }
+
+        public static List<int> ToIntList(this string s, char seperator = ',', int defaultLength = -1, int defaultValue = -9999999)
+        {
+            if (string.IsNullOrWhiteSpace(s))
+            {
+                List<int> ints = new List<int>();
+                for (int i = 0; i < defaultLength; i++)
+                {
+                    ints.Add(defaultValue);
+                }
+                return ints;
+            }
+            return s.Split(seperator).Where(s => !string.IsNullOrWhiteSpace(s)).Select(s => int.Parse(s)).ToList();
         }
 
         public static float ToFloat(this string s)
@@ -71,7 +99,6 @@ namespace MintHelper
             List<float> args = s.Split(',').Select(s => s.Trim().ToFloat()).ToList();
             return new Vector3(args[0], args[1], args[2]);
         }
-
         /// <summary>
         /// Parses "Health:100%" / "Attack:20.3"
         /// Into ("Health", 100, true) / ("Attack", 20.3, false)
