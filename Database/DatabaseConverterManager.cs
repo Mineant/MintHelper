@@ -54,6 +54,12 @@ namespace MintHelper
             return Mathf.NegativeInfinity;  // To prevent errors, see them immediately.
         }
 
+        public static int ToInt(this string s)
+        {
+            if (int.TryParse(s, out int result)) return result;
+            return -99999999;  // To prevent errors, see them immediately.
+        }
+
         public static Vector2 ToVector2(this string s)
         {
             List<float> args = s.Split(',').Select(s => s.Trim().ToFloat()).ToList();
