@@ -28,6 +28,8 @@ namespace MintHelper
             {
                 converter.GenerateDatabase(databases);
             }
+
+            UnityEditor.Compilation.CompilationPipeline.RequestScriptCompilation();
         }
     }
 
