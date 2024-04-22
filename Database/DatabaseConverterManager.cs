@@ -61,7 +61,47 @@ namespace MintHelper
                 }
                 return strings;
             }
-            return s.Split(seperator).Select(s => s.Trim()).ToList();
+
+            // Strings are special
+            // use for loop to split string by seperator "," and stored them into a list
+            List<string> splittedStrings = s.Split(seperator).Select(s => s.Trim()).ToList();
+            List<string> newStrings = new List<string>();
+            List<string> subList = new List<string>();
+            for (int i = 0; i < splittedStrings.Count; i++)
+            {
+                string s1 = splittedStrings[i];
+
+                // We detected a new list thingy
+                if (subList.Count == 0 && s1[0] == '[')
+                {
+                    // we store this into subList
+                    s1 = s1.Remove(0, 1);
+                    subList.Add(s1);
+                }
+                else if (subList.Count > 0 && s1.Last() == ']')
+                {
+                    // we end the storing, and store the whole list into the new string
+                    s1 = s1.Remove(s1.Length - 1, 1);
+                    subList.Add(s1);
+                    newStrings.Add(string.Join(",", subList));
+                    subList.Clear();
+                }
+                else if (subList.Count > 0)
+                {
+                    // currently in array, store list into sub list
+                    subList.Add(s1);
+                }
+                else
+                {
+                    // normal store
+                    newStrings.Add(s1);
+                }
+            }
+
+            if (subList.Count > 0) Debug.LogError("have not ] somewhere! String list cannot parse.");
+
+
+            return newStrings;
         }
 
         public static List<int> ToIntList(this string s, char seperator = ',', int defaultLength = -1, int defaultValue = -9999999)
