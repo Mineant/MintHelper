@@ -26,7 +26,7 @@ public abstract class ItemDBConverter<T> : ItemDBConverter
         // Start from 1, ignore first line
         for (int i = 1; i < database.GetLength(1); i++)
         {
-            if (String.IsNullOrEmpty(database[0, i])) break;
+            if (IsDatabaseItemNull(database, i)) break;
 
             T item = default;
 
@@ -65,6 +65,17 @@ public abstract class ItemDBConverter<T> : ItemDBConverter
     protected abstract void EditItem(T item, string[,] database, int index);
 
     protected abstract void PostProcessItems(List<T> items);
+
+    /// <summary>
+    /// By default this checks if the first item (the id) is empty or null, if empty, then will stop processing database and not process the remaining items.
+    /// </summary>
+    /// <param name="database"></param>
+    /// <param name="index"></param>
+    /// <returns></returns>
+    protected virtual bool IsDatabaseItemNull(string[,] database, int index)
+    {
+        return String.IsNullOrWhiteSpace(database[0, index]);
+    }
 
 }
 
