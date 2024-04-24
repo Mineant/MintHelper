@@ -15,6 +15,10 @@ public abstract class ItemDBConverter : MonoBehaviour
         return false;
     }
 
+    void Update()
+    {
+        // Used for letting unity to show the monobehaviour enable option in the hierarchy
+    }
 }
 
 public abstract class ItemDBConverter<T> : ItemDBConverter

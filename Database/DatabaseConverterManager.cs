@@ -38,6 +38,7 @@ namespace MintHelper
             bool requireRecompile = false;
             foreach (ItemDBConverter converter in converters)
             {
+                if(converter.enabled == false) continue;
                 converter.GenerateDatabase(databases);
                 if (converter.IsRecompileRequired()) requireRecompile = true;
             }
