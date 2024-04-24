@@ -9,6 +9,12 @@ using UnityEngine;
 public abstract class ItemDBConverter : MonoBehaviour
 {
     public abstract void GenerateDatabase(List<TextAsset> databases);
+
+    public virtual bool IsRecompileRequired()
+    {
+        return false;
+    }
+
 }
 
 public abstract class ItemDBConverter<T> : ItemDBConverter
@@ -76,6 +82,7 @@ public abstract class ItemDBConverter<T> : ItemDBConverter
     {
         return String.IsNullOrWhiteSpace(database[0, index]);
     }
+
 
 }
 

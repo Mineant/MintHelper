@@ -13,6 +13,17 @@ namespace MintHelper
 {
     public class DatabaseConverterManager : MonoBehaviour
     {
+        [ContextMenu("Refresh Database and Generate DB")]
+        public void RefreshAndGenerateDatabase()
+        {
+            StartCoroutine(_RefreshAndGenerateDatabaseCoroutine());
+        }
+
+        private IEnumerator _RefreshAndGenerateDatabaseCoroutine()
+        {
+            yield return BobbinCore.Instance._StartRefresh();
+            GenerateDatabase();
+        }
 
         [ContextMenu("Generate DB")]
         public void GenerateDatabase()
@@ -24,12 +35,14 @@ namespace MintHelper
             int found = Helpers.TryGetUnityObjectsOfTypeFromPath<TextAsset>("Assets/_Database/", databases);
 
             Debug.Log($"Found {found} Database");
+            bool requireRecompile = false;
             foreach (ItemDBConverter converter in converters)
             {
                 converter.GenerateDatabase(databases);
+                if (converter.IsRecompileRequired()) requireRecompile = true;
             }
 
-            UnityEditor.Compilation.CompilationPipeline.RequestScriptCompilation();
+            if (requireRecompile) UnityEditor.Compilation.CompilationPipeline.RequestScriptCompilation();
         }
     }
 

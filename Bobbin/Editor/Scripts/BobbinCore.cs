@@ -90,6 +90,14 @@ namespace MintHelper
             }
         }
 
+        public IEnumerator _StartRefresh()
+        {
+            if (refreshInProgress == false)
+            {
+                yield return EditorCoroutines.StartCoroutine(RefreshCoroutine(), this);
+            }
+        }
+
         /// <summary>
         /// The main editor coroutine that fetches URLS and saves the files into the project.
         /// </summary>
