@@ -16,12 +16,12 @@ namespace MintHelper
         [ContextMenu("Refresh Database and Generate DB")]
         public void RefreshAndGenerateDatabase()
         {
-            StartCoroutine(_RefreshAndGenerateDatabaseCoroutine());
+            EditorCoroutines.StartCoroutine(_RefreshAndGenerateDatabaseCoroutine(), this);
         }
 
         private IEnumerator _RefreshAndGenerateDatabaseCoroutine()
         {
-            yield return BobbinCore.Instance._StartRefresh();
+            yield return EditorCoroutines.StartCoroutine(BobbinCore.Instance._StartRefresh(), this);
             GenerateDatabase();
         }
 
@@ -38,7 +38,7 @@ namespace MintHelper
             bool requireRecompile = false;
             foreach (ItemDBConverter converter in converters)
             {
-                if(converter.enabled == false) continue;
+                if (converter.enabled == false) continue;
                 converter.GenerateDatabase(databases);
                 if (converter.IsRecompileRequired()) requireRecompile = true;
             }
