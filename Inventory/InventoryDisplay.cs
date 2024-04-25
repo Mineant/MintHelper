@@ -41,6 +41,10 @@ namespace Mineant.Inventory
         {
             Container.DestroyAllProducts();
 
+            Inventory = inventory;
+            PlayerID = inventory.PlayerID;
+            InventoryID = inventory.InventoryID;
+            
             for (int i = 0; i < inventory.GetContent().Length; i++)
             {
                 BaseGameItemUIProduct product = Container.GenerateNewProduct(new BaseGameItemUIProductArgs(inventory.GetContent()[i], i, this));
