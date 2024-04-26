@@ -5,8 +5,8 @@ using System.Data.Common;
 using System.Linq;
 using Mineant;
 using Mineant.Inventory;
-using UnityEditor;
 using UnityEngine;
+using UnityEditor;
 
 #if UNITY_EDITOR
 namespace Mineant

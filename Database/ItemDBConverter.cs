@@ -6,6 +6,7 @@ using Mineant;
 using UnityEditor;
 using UnityEngine;
 
+#if UNITY_EDITOR
 namespace Mineant
 {
 
@@ -95,3 +96,4 @@ namespace Mineant
 
 
 }
+#endif

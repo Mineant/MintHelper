@@ -6,6 +6,7 @@ using Mineant.Inventory;
 using UnityEditor;
 using UnityEngine;
 
+#if UNITY_EDITOR
 namespace Mineant
 {
     public class InventoryItemDBConverter : ItemDBConverter<InventoryItem>
@@ -51,3 +52,4 @@ namespace Mineant
         }
     }
 }
+#endif
