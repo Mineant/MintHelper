@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEditor;
 
-namespace MintHelper
+namespace Mineant
 {
     internal class BobbinTreeView : TreeViewWithTreeModel<BobbinPath>
     {
@@ -256,7 +256,7 @@ namespace MintHelper
                         }
                         if (column == MyColumns.Value2)
                         {
-                            item.data.fileType = (MintHelper.FileType)EditorGUI.EnumPopup(cellRect, (Enum)item.data.fileType);
+                            item.data.fileType = (Mineant.FileType)EditorGUI.EnumPopup(cellRect, (Enum)item.data.fileType);
                         }
                         if (column == MyColumns.Value3)
                         {

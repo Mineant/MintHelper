@@ -7,7 +7,7 @@ using System.Reflection;
 
 #pragma warning disable 618
 
-namespace MintHelper
+namespace Mineant
 {
 	public class EditorCoroutines
 	{

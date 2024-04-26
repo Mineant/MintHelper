@@ -9,7 +9,7 @@ using UnityEditor;
 using UnityEngine;
 
 #if UNITY_EDITOR
-namespace MintHelper
+namespace Mineant
 {
     public class DatabaseConverterManager : MonoBehaviour
     {

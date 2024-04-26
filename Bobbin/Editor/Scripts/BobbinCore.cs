@@ -8,7 +8,7 @@ using UnityEngine;
 using UnityEditor;
 using UnityEngine.Networking;
 
-namespace MintHelper
+namespace Mineant
 {
 
     [InitializeOnLoad]

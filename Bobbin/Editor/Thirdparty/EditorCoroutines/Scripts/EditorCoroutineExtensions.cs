@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using UnityEditor;
 
-namespace MintHelper
+namespace Mineant
 {
 	public static class EditorCoroutineExtensions
 	{

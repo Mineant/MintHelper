@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEditor;
 using UnityEditor.IMGUI.Controls;
 
-namespace MintHelper
+namespace Mineant
 {
 
     public enum FileType { txt, csv, json, xml, jpg, png, bytes }
