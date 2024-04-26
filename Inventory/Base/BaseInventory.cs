@@ -42,6 +42,7 @@ namespace Mineant.Inventory
         public abstract bool AddItemAt(BaseGameItem itemToAdd, int index);
         public abstract bool RemoveItem(BaseGameItem itemToRemove);
         public abstract bool MoveItem(int start, int end);
+        public abstract bool Contains(BaseGameItem item);
     }
 
 
@@ -267,6 +268,11 @@ namespace Mineant.Inventory
                 }
             }
             return list;
+        }
+
+        public override bool Contains(BaseGameItem item)
+        {
+            return _content.Contains(item);
         }
 
         public virtual void UpdateInventoryUI()
