@@ -8,8 +8,7 @@ namespace Mineant.Inventory
     {
         public static List<InventoryDisplay> RegisteredInventoryDisplays;
 
-        [SerializeReference]
-        public Container<BaseGameItemUIProduct, BaseGameItemUIProductArgs> Container;
+        public BaseGameInventoryItemUIContainer Container;
 
         [Header("Listener")]
         public bool Listen;
@@ -45,7 +44,7 @@ namespace Mineant.Inventory
             Inventory = inventory;
             PlayerID = inventory.PlayerID;
             InventoryID = inventory.InventoryID;
-            
+
             for (int i = 0; i < inventory.GetContent().Length; i++)
             {
                 BaseGameItemUIProduct product = Container.GenerateNewProduct(new BaseGameItemUIProductArgs(inventory.GetContent()[i], i, this));
