@@ -7,7 +7,9 @@ namespace Mineant.Inventory
     public class InventoryDisplay : MonoBehaviour
     {
         public static List<InventoryDisplay> RegisteredInventoryDisplays;
-        public BaseGameInventoryItemUIContainer Container;
+
+        [SerializeReference]
+        public Container<BaseGameItemUIProduct, BaseGameItemUIProductArgs> Container;
 
         [Header("Listener")]
         public bool Listen;
