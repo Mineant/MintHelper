@@ -1,3 +1,4 @@
+#if MOREMOUNTAINS_NICEVIBRATIONS_INSTALLED
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -106,3 +107,4 @@ namespace Mineant
 
     }
 }
+#endif
