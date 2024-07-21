@@ -482,6 +482,8 @@ namespace Mineant.Inventory
 
         public virtual void UpdateInventoryUI()
         {
+            if (OnChange != null) OnChange.Invoke();
+
             if (InventoryDisplay.RegisteredInventoryDisplays == null) return;
 
             foreach (InventoryDisplay display in InventoryDisplay.RegisteredInventoryDisplays)
@@ -490,9 +492,7 @@ namespace Mineant.Inventory
                 {
                     display.Generate(this);
                 }
-            }
-
-            if (OnChange != null) OnChange.Invoke();
+            }            
         }
 
         protected virtual void DebugMessage(string msg)
