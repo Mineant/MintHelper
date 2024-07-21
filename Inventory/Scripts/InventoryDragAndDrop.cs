@@ -52,21 +52,23 @@ namespace Mineant.Inventory
         {
             if (_slot == null) return;
             Vector3 screenPoint = Input.mousePosition;
-            _slot.IconImage.transform.SetParent(transform, false);
+            // LayoutElement slotLayout = _slot.gameObject.SmartGetComponent<LayoutElement>();
+            // slotLayout.ignoreLayout = true;
+            _slot.ItemContainer.transform.SetParent(transform, false);
             if (_canvas.worldCamera != null)
             {
                 screenPoint.z = _canvas.planeDistance;
-                _slot.IconImage.transform.position = _canvas.worldCamera.ScreenToWorldPoint(screenPoint);
+                _slot.ItemContainer.transform.position = _canvas.worldCamera.ScreenToWorldPoint(screenPoint);
             }
             else
-                _slot.IconImage.transform.position = screenPoint;
+                _slot.ItemContainer.transform.position = screenPoint;
         }
 
         public void OnEndDrag(PointerEventData eventData)
         {
             if (_slot == null) return;
-            _slot.IconImage.transform.SetParent(_slot.transform, false);
-            _slot.IconImage.transform.localPosition = Vector3.zero;
+            _slot.ItemContainer.transform.SetParent(_slot.transform, false);
+            _slot.ItemContainer.transform.localPosition = Vector3.zero;
             Raycast(eventData);
 
             ///// MINE /////

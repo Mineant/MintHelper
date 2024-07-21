@@ -11,6 +11,10 @@ namespace Mineant.Inventory
     {
         public TMP_Text NameText;
         public Image IconImage;
+        public TMP_Text QuantityText;
+
+        [Tooltip("This will be the object used for dragging.")]
+        public GameObject ItemContainer;
 
         [Header("Data")]
         public int Index;
@@ -28,12 +32,20 @@ namespace Mineant.Inventory
             if (IconImage)
             {
                 IconImage.gameObject.SetActive(!BaseGameItem.IsNull());
-                if (!BaseGameItem.IsNull()) IconImage.sprite = BaseGameItem.GetParent().Icon;
+                if (!BaseGameItem.IsNull()) IconImage.sprite = BaseGameItem.GetBaseParent().Icon;
             }
-            if (NameText)
+            if (NameText)   
             {
-                if (!BaseGameItem.IsNull()) NameText.text = BaseGameItem.GetParent().Name;
+                if (!BaseGameItem.IsNull()) NameText.text = BaseGameItem.GetBaseParent().Name;
                 else NameText.text = "";
+            }
+
+            if (QuantityText)
+            {
+                if (!BaseGameItem.IsNull() && BaseGameItem.GetBaseParent().CanStack())
+                    QuantityText.text = BaseGameItem.Quantity.ToString();
+                else
+                    QuantityText.text = "";
             }
         }
     }

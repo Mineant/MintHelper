@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace Mineant.Inventory
 {
+    [System.Serializable]
     public class GameInventory : BaseInventory<BaseGameItem>
     {
 

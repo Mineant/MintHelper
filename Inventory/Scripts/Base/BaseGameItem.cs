@@ -4,9 +4,17 @@ using UnityEngine;
 
 namespace Mineant.Inventory
 {
+    [System.Serializable]
     public abstract class BaseGameItem
     {
-        public abstract BaseItem GetParent();
+        public int Quantity;
+
+        protected BaseGameItem()
+        {
+            Quantity = 1;
+        }
+
+        public abstract BaseItem GetBaseParent();
         public virtual string GetDescription()
         {
             return "BaseGameItem Get Description No Implemented XXXXXXXXXXXX";
@@ -14,8 +22,10 @@ namespace Mineant.Inventory
 
     }
 
+    [System.Serializable]
     public abstract class BaseGameItem<TItem> : BaseGameItem where TItem : BaseItem
     {
+        [SerializeField]
         protected TItem _parent;
 
         public BaseGameItem(TItem parent)
@@ -23,12 +33,12 @@ namespace Mineant.Inventory
             _parent = parent;
         }
 
-        public override BaseItem GetParent()
+        public override BaseItem GetBaseParent()
         {
             return _parent;
         }
 
-        public TItem GetTParent()
+        public TItem GetParent()
         {
             return _parent;
         }
