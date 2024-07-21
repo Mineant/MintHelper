@@ -1,0 +1,26 @@
+name: Publish Release
+
+on:
+  push:
+    branches:
+      - Publishing  # Trigger on push to the "Publishing" branch
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Get commit message
+        id: get_commit
+        run: echo "::set-output name=message::$(git log -1 --pretty=%B)"
+
+      - name: Create Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          COMMIT_MESSAGE=$(git log -1 --pretty=%B)
+          COMMIT_TITLE=$(git log -1 --pretty=%s)
+          gh release create "$COMMIT_TITLE" --title "$COMMIT_TITLE" --notes "$COMMIT_MESSAGE"
