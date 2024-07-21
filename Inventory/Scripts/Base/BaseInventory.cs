@@ -468,7 +468,7 @@ namespace Mineant.Inventory
         public override int GetQuantity(string itemID)
         {
             List<int> foundItems = InventoryContains(itemID);
-            if (foundItems.Count == 0) return -1;
+            if (foundItems.Count == 0) return 0;
 
             // We will see if all the items with the same id have the required quantity
             int totalQuantity = 0;
