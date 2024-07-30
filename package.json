@@ -8,8 +8,5 @@
   "author": {
     "name": "Mineant",
     "email": "kawaiianthony@gmail.com"
-  },
-  "dependencies": {
-    "com.unity.textmeshpro": ""
   }
 }
