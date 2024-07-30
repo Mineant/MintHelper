@@ -9,9 +9,13 @@ namespace Mineant.Inventory
     {
         public int Quantity;
 
+        [SerializeField]
+        protected BaseItem _baseParent;
+
         protected BaseGameItem()
         {
             Quantity = 1;
+            _baseParent = null;
         }
 
         public abstract BaseItem GetBaseParent();
@@ -31,6 +35,7 @@ namespace Mineant.Inventory
         public BaseGameItem(TItem parent)
         {
             _parent = parent;
+            _baseParent = parent;
         }
 
         public override BaseItem GetBaseParent()
