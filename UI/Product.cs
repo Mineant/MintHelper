@@ -12,12 +12,10 @@ namespace Mineant
 
         public virtual void Show()
         {
-            gameObject.SetActive(true);
         }
 
         public virtual void Hide()
         {
-            gameObject.SetActive(false);
         }
 
 
@@ -36,11 +34,14 @@ namespace Mineant
         public Button ProductButton;
         public Toggle ProductToggle;
         public bool RebuildAfterGenerate;
-
+        public CanvasGroup CanvasGroup { get; protected set; }
+        public LayoutElement LayoutElement { get; protected set; }
         protected Action<Product<TArgs>> OnProductInteractorClick;
-
+        protected ProductActiveMode _activeMode;
         protected virtual void Awake()
         {
+            CanvasGroup = GetComponent<CanvasGroup>();
+            LayoutElement = GetComponent<LayoutElement>();
             if (ProductButton) ProductButton.onClick.AddListener(ProductInteractorClick);
             if (ProductToggle) ProductToggle.onValueChanged.AddListener((value) => { if (value) ProductInteractorClick(); });
         }
@@ -50,12 +51,17 @@ namespace Mineant
             if (OnProductInteractorClick != null) OnProductInteractorClick.Invoke(this);
         }
 
+        public virtual void Initialize(ProductActiveMode activeMode)
+        {
+            _activeMode = activeMode;
+        }
+
         /// <summary>
         /// Use a method to wrap a click, because restrict a product to only trigger one event when click.
         /// </summary>
         public virtual void OnInteract(Action<Product<TArgs>> onProductButtonClick)
         {
-            if(ProductButton == null && ProductToggle == null) Debug.LogError("Product interactor cannot be null. Cannt trigger any events.");
+            if (ProductButton == null && ProductToggle == null) Debug.LogError("Product interactor cannot be null. Cannt trigger any events.");
             OnProductInteractorClick = onProductButtonClick;
         }
 
@@ -76,7 +82,31 @@ namespace Mineant
             }
         }
 
+        public override void Show()
+        {
+            base.Show();
+            ProductSetActive(true);
+        }
 
+        public override void Hide()
+        {
+            base.Hide();
+            ProductSetActive(false);
+        }
+        
+        protected virtual void ProductSetActive(bool value)
+        {
+            switch (_activeMode)
+            {
+                case ProductActiveMode.GameObject:
+                    gameObject.SetActive(value);
+                    break;
+                case ProductActiveMode.CanvasGroupLayoutElement:
+                    CanvasGroup.alpha = value ? 1f : 0f;
+                    LayoutElement.ignoreLayout = !value;
+                    break;
+            }
+        }
 
     }
 

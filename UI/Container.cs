@@ -32,7 +32,7 @@ namespace Mineant
         public bool AutoUpdateLayout;
 
         [Tooltip("Uses canvas group and layout element to show products, instead of activate / deactivate the products. This is useful activing and deactivating the gameobject consumes a lot of power.")]
-        public bool UseCanvasGroup;
+        public ProductActiveMode ActiveMode = ProductActiveMode.GameObject;
 
         [Header("Advanced")]
         [Tooltip("if a toggle group can be found on this object, then if products hv toggle group, will automatically assign.")]
@@ -49,6 +49,7 @@ namespace Mineant
         protected TProduct _createdProduct;
         private int _containerUpdated = 0;
         public static int LAYOUT_UPDATE_FRAMES = 5;
+        public CanvasGroup CanvasGroup { get; protected set; }
         public LayoutGroup LayoutGroup { get; protected set; }
         public ToggleGroup ToggleGroup { get; protected set; }
 
@@ -57,6 +58,7 @@ namespace Mineant
         {
             LayoutGroup = ProductLocation.GetComponent<LayoutGroup>();
             ToggleGroup = GetComponent<ToggleGroup>();
+            CanvasGroup = GetComponent<CanvasGroup>();
             if (AutoSetProductToggleGroup && ToggleGroup == null) Debug.LogError("Cannot auto set toggle group if no toggle grup at container.");
             if (ProductLocation == null) ProductLocation = this.transform;
             if (DestroyOnStart & AddExistingProducts) Debug.LogError("Cannot destroy existing products while trying to add existing products.");
@@ -104,6 +106,7 @@ namespace Mineant
         protected virtual TProduct CreateNewProduct()
         {
             _createdProduct = Instantiate(ProductPrefab, ProductLocation);
+            _createdProduct.Initialize(ActiveMode);
             _createProducts.Add(_createdProduct);
             _createdProduct.Hide();
             _createdProduct.gameObject.name = $"{_createdProduct.gameObject.name}_{_createProducts.Count}";
@@ -144,8 +147,19 @@ namespace Mineant
 
         protected virtual bool IsProductActive(TProduct product)
         {
-            return product.gameObject.activeSelf;
+            switch (ActiveMode)
+            {
+                case ProductActiveMode.GameObject:
+                    return product.gameObject.activeSelf;
+                case ProductActiveMode.CanvasGroupLayoutElement:
+                    return product.CanvasGroup.alpha > 0f;
+            }
+
+            Debug.LogError("???");
+            return false;
         }
+
+
 
         /// <summary>
         /// Gets a new product, new generates it
