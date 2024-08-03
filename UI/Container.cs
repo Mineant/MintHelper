@@ -31,6 +31,9 @@ namespace Mineant
         public bool AddExistingProducts;
         public bool AutoUpdateLayout;
 
+        [Tooltip("Uses canvas group and layout element to show products, instead of activate / deactivate the products. This is useful activing and deactivating the gameobject consumes a lot of power.")]
+        public bool UseCanvasGroup;
+
         [Header("Advanced")]
         [Tooltip("if a toggle group can be found on this object, then if products hv toggle group, will automatically assign.")]
         public bool AutoSetProductToggleGroup;
@@ -50,7 +53,7 @@ namespace Mineant
         public ToggleGroup ToggleGroup { get; protected set; }
 
 
-        void Awake()
+        protected virtual void Awake()
         {
             LayoutGroup = ProductLocation.GetComponent<LayoutGroup>();
             ToggleGroup = GetComponent<ToggleGroup>();
@@ -78,7 +81,7 @@ namespace Mineant
             CreatePool();
         }
 
-        void LateUpdate()
+        protected virtual void LateUpdate()
         {
             // Update the container.
             if (_containerUpdated > 0)
@@ -90,7 +93,7 @@ namespace Mineant
 
 
 
-        protected void CreatePool()
+        protected virtual void CreatePool()
         {
             for (int i = 0; i < DefaultSize; i++)
             {
@@ -98,7 +101,7 @@ namespace Mineant
             }
         }
 
-        protected TProduct CreateNewProduct()
+        protected virtual TProduct CreateNewProduct()
         {
             _createdProduct = Instantiate(ProductPrefab, ProductLocation);
             _createProducts.Add(_createdProduct);
@@ -123,12 +126,12 @@ namespace Mineant
         /// <summary>
         /// Returns the next unused product. 
         /// </summary>
-        public TProduct GetNextProduct()
+        public virtual TProduct GetNextProduct()
         {
             if (AutoReorderProducts) ReorderCreatedProducts();
             for (int i = 0; i < _createProducts.Count; i++)
             {
-                if (!_createProducts[i].gameObject.activeSelf)
+                if (!IsProductActive(_createProducts[i]))
                 {
                     // if we find one, we return it
                     return _createProducts[i];
@@ -137,6 +140,11 @@ namespace Mineant
 
             // if we haven't found an inactive object (the pool is empty), and if we can extend it, we add one new object to the pool, and return it		 
             return CreateNewProduct();
+        }
+
+        protected virtual bool IsProductActive(TProduct product)
+        {
+            return product.gameObject.activeSelf;
         }
 
         /// <summary>
@@ -159,7 +167,7 @@ namespace Mineant
         /// <summary>
         /// Hides all previous products and generates completely new ones with the args.
         /// </summary>
-        public List<TProduct> SetProducts(IEnumerable<TArgs> argsList)
+        public virtual List<TProduct> SetProducts(IEnumerable<TArgs> argsList)
         {
             List<TProduct> products = new();
 
@@ -187,16 +195,16 @@ namespace Mineant
         /// This is very costly to do. Cache it. Do not do it every frame.
         /// </summary>
         /// <returns></returns>
-        public List<TProduct> GetActiveProducts()
+        public virtual List<TProduct> GetActiveProducts()
         {
             if (AutoReorderProducts) ReorderCreatedProducts();
-            return _createProducts.Where(p => p.gameObject.activeSelf).ToList();
+            return _createProducts.Where(p => IsProductActive(p)).ToList();
         }
 
         /// <summary>
         /// Sometimes, if the elements in the conainer are reordered by other UI elements, the container will function wrongly, reordering it should fix problems
         /// </summary>
-        public void ReorderCreatedProducts()
+        public virtual void ReorderCreatedProducts()
         {
             _createProducts = _createProducts.OrderBy(p => p.transform.GetSiblingIndex()).ToList();
         }
@@ -204,7 +212,7 @@ namespace Mineant
         /// <summary>
         // If Container has a layout group component, can use this function to update.
         /// </summary>
-        public void UpdateLayoutGroup()
+        public virtual void UpdateLayoutGroup()
         {
             if (LayoutGroup == null) return;
             LayoutRebuilder.ForceRebuildLayoutImmediate(LayoutGroup.transform as RectTransform);
