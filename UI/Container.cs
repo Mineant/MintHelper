@@ -53,9 +53,19 @@ namespace Mineant
         public LayoutGroup LayoutGroup { get; protected set; }
         public ToggleGroup ToggleGroup { get; protected set; }
 
+        protected bool _initialized = false;
 
         protected virtual void Awake()
         {
+            Init();
+        }
+
+        public void Init()
+        {
+            if (_initialized) return;
+
+            _initialized = true;
+
             LayoutGroup = ProductLocation.GetComponent<LayoutGroup>();
             ToggleGroup = GetComponent<ToggleGroup>();
             CanvasGroup = GetComponent<CanvasGroup>();
@@ -166,6 +176,8 @@ namespace Mineant
         /// </summary>
         public virtual TProduct GenerateNewProduct(TArgs args)
         {
+            Init();
+
             TProduct product = GetNextProduct();
             product.Generate(args);
 
@@ -197,6 +209,8 @@ namespace Mineant
 
         public virtual void DestroyAllProducts()
         {
+            Init();
+
             foreach (TProduct product in _createProducts)
             {
                 product.Hide();
@@ -211,6 +225,8 @@ namespace Mineant
         /// <returns></returns>
         public virtual List<TProduct> GetActiveProducts()
         {
+            Init();
+            
             if (AutoReorderProducts) ReorderCreatedProducts();
             return _createProducts.Where(p => IsProductActive(p)).ToList();
         }
@@ -220,6 +236,8 @@ namespace Mineant
         /// </summary>
         public virtual void ReorderCreatedProducts()
         {
+            Init();
+
             _createProducts = _createProducts.OrderBy(p => p.transform.GetSiblingIndex()).ToList();
         }
 
