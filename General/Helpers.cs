@@ -7,6 +7,8 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
+using Newtonsoft.Json;
+
 
 #if DOTWEEN
 using DG.Tweening;
@@ -24,6 +26,19 @@ namespace Mineant
         {
             if (list.Count == 0 || index >= list.Count) return defaultValue;
             return list[index];
+        }
+
+        public static T JsonDeepCopy<T>(this T obj, JsonSerializerSettings settings = null)
+        {
+            if (settings == null)
+            {
+                settings = new JsonSerializerSettings();
+                settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                settings.TypeNameHandling = TypeNameHandling.All;
+                settings.Formatting = Formatting.Indented;
+            }
+
+            return JsonConvert.DeserializeObject<T>(JsonConvert.SerializeObject(obj, settings), settings);
         }
 
         #endregion
@@ -53,7 +68,7 @@ namespace Mineant
         public static void SmartAdd<T>(this List<T> target, T item)
         {
             if (target == null) target = new List<T>();
-            if (item == null ) return;
+            if (item == null) return;
             target.Add(item);
         }
 
