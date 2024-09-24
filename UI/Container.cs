@@ -60,7 +60,7 @@ namespace Mineant
             Init();
         }
 
-        public void Init()
+        public virtual void Init()
         {
             if (_initialized) return;
 
@@ -80,8 +80,8 @@ namespace Mineant
                 }
             }
 
-
             _createProducts = new List<TProduct>();
+
             if (AddExistingProducts)
             {
                 foreach (Transform child in ProductLocation.transform)
@@ -90,6 +90,24 @@ namespace Mineant
                 }
             }
 
+            CreatePool();
+        }
+
+        public virtual void ChangeProductPrefab(TProduct productPrefab)
+        {
+            ProductPrefab = productPrefab;
+
+            if (_createProducts != null)
+            {
+                foreach (TProduct product in _createProducts)
+                {
+                    product.Hide();
+                    Destroy(product.gameObject);
+                }
+            }
+
+            _createProducts = new();
+            
             CreatePool();
         }
 
@@ -226,7 +244,7 @@ namespace Mineant
         public virtual List<TProduct> GetActiveProducts()
         {
             Init();
-            
+
             if (AutoReorderProducts) ReorderCreatedProducts();
             return _createProducts.Where(p => IsProductActive(p)).ToList();
         }
