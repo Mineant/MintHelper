@@ -216,7 +216,7 @@ namespace Mineant
         /// <summary>
         /// Hides all previous products and generates completely new ones with the args.
         /// </summary>
-        public virtual List<TProduct> SetProducts(IEnumerable<TArgs> argsList)
+        public virtual List<TProduct> DestroyAndGenerateNewProducts(IEnumerable<TArgs> argsList, Action<TProduct> onInteract = null)
         {
             List<TProduct> products = new();
 
@@ -224,7 +224,7 @@ namespace Mineant
 
             foreach (TArgs args in argsList)
             {
-                products.Add(GenerateNewProduct(args));
+                products.Add(GenerateNewProduct(args, onInteract));
             }
 
             return products;
