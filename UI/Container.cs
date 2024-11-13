@@ -107,7 +107,7 @@ namespace Mineant
             }
 
             _createProducts = new();
-            
+
             CreatePool();
         }
 
@@ -192,7 +192,7 @@ namespace Mineant
         /// <summary>
         /// Gets a new product, new generates it
         /// </summary>
-        public virtual TProduct GenerateNewProduct(TArgs args)
+        public virtual TProduct GenerateNewProduct(TArgs args, Action<TProduct> onInteract = null)
         {
             Init();
 
@@ -202,6 +202,11 @@ namespace Mineant
             _containerUpdated = LAYOUT_UPDATE_FRAMES;
 
             if (OnContentChanged != null) OnContentChanged.Invoke();
+
+            if (onInteract != null)
+            {
+                product.OnInteract((x)=> { onInteract.Invoke((TProduct)x); });
+            }
 
             return product;
         }
