@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Mineant;
 using UnityEngine;
 
-namespace Mineant
+namespace Mineant.UI
 {
     [System.Serializable]
     public abstract class UiWidgetData

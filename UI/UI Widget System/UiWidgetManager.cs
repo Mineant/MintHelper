@@ -5,7 +5,7 @@ using System.IO;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace Mineant
+namespace Mineant.UI
 {
     public class UiWidgetManager : Singleton<UiWidgetManager>
     {
