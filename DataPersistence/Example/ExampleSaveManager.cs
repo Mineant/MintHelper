@@ -15,7 +15,12 @@ namespace Mineant.SaveSystem
 
     }
 
-    public class ExampleSaveManager : DataPersistenceManager<ExampleSaveManager, ExampleFileDataHandler, ExampleGameData>
+    public interface ExampleDataPersistence : IDataPersistence<ExampleGameData>
+    {
+
+    }
+
+    public class ExampleSaveManager : DataPersistenceManager<ExampleSaveManager, ExampleDataPersistence, ExampleFileDataHandler, ExampleGameData>
     {
 
     }

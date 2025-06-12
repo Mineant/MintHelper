@@ -6,9 +6,10 @@ using UnityEngine.SceneManagement;
 
 namespace Mineant.SaveSystem
 {
-    public class DataPersistenceManager<TManager, TFileDataHandler, TGameData> : MonoBehaviour
-        where TManager : DataPersistenceManager<TManager, TFileDataHandler, TGameData>
+    public class DataPersistenceManager<TManager, TDataPersistence, TFileDataHandler, TGameData> : MonoBehaviour
+        where TManager : DataPersistenceManager<TManager, TDataPersistence, TFileDataHandler, TGameData>
         where TFileDataHandler : FileDataHandler<TGameData>, new()
+        where TDataPersistence : IDataPersistence<TGameData>
         where TGameData : GameData, new()
     {
         [Header("Debugging")]
@@ -26,7 +27,7 @@ namespace Mineant.SaveSystem
         [SerializeField] protected float _autoSaveTimeSeconds = 60f;
 
         protected TGameData _gameData;
-        protected List<IDataPersistence> _dataPersistenceObjects;
+        protected List<TDataPersistence> _dataPersistenceObjects;
         protected TFileDataHandler _dataHandler;
 
         protected string _selectedProfileId = "";
@@ -138,7 +139,7 @@ namespace Mineant.SaveSystem
             }
 
             // push the loaded data to all other scripts that need it
-            foreach (IDataPersistence dataPersistenceObj in _dataPersistenceObjects)
+            foreach (TDataPersistence dataPersistenceObj in _dataPersistenceObjects)
             {
                 dataPersistenceObj.LoadData(_gameData);
             }
@@ -160,7 +161,7 @@ namespace Mineant.SaveSystem
             }
 
             // pass the data to other scripts so they can update it
-            foreach (IDataPersistence dataPersistenceObj in _dataPersistenceObjects)
+            foreach (TDataPersistence dataPersistenceObj in _dataPersistenceObjects)
             {
                 dataPersistenceObj.SaveData(_gameData);
             }
@@ -177,13 +178,13 @@ namespace Mineant.SaveSystem
             SaveGame();
         }
 
-        protected virtual List<IDataPersistence> FindAllDataPersistenceObjects()
+        protected virtual List<TDataPersistence> FindAllDataPersistenceObjects()
         {
             // FindObjectsofType takes in an optional boolean to include inactive gameobjects
-            IEnumerable<IDataPersistence> dataPersistenceObjects = FindObjectsOfType<MonoBehaviour>(true)
-                .OfType<IDataPersistence>();
+            IEnumerable<TDataPersistence> dataPersistenceObjects = FindObjectsOfType<MonoBehaviour>(true)
+                .OfType<TDataPersistence>();
 
-            return new List<IDataPersistence>(dataPersistenceObjects);
+            return new List<TDataPersistence>(dataPersistenceObjects);
         }
 
         public virtual bool HasGameData()
@@ -199,7 +200,7 @@ namespace Mineant.SaveSystem
         protected virtual IEnumerator AutoSave()
         {
             if (!_autoSaveGame) yield break;
-            
+
             while (true)
             {
                 yield return new WaitForSeconds(_autoSaveTimeSeconds);
