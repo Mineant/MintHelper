@@ -9,12 +9,12 @@ namespace Mineant.UI
 {
     public class UiWidgetManager : Singleton<UiWidgetManager>
     {
-        public enum UiWidgetPrefabStorageMode { ResourceFolder, CustomMethod = 100 }
+        public enum UiWidgetPrefabStorageMode { ResourceFolderByName, CustomMethod = 100 }
 
         [Tooltip("Where should the UI be spawned by default. For ResourceFolder, the Id would be the prefab name.")]
         public RectTransform DefaultWidgetParent;
 
-        [Tooltip("Where should we find the prefabs for the ui widgets")]
+        [Tooltip("Where should we find the prefabs for the ui widgets.")]
         public UiWidgetPrefabStorageMode WidgetPrefabStorageMode;
 
         [Tooltip("If use resource folder, specify the folder name here.")]
@@ -28,12 +28,19 @@ namespace Mineant.UI
         public Action<GameObject> OnClickedUI;
         protected Dictionary<string, UiWidget> _widgetDatabase;
 
+        /// <summary>
+        /// Key is widget type, value is the prefab for that type.
+        /// </summary>
+        protected Dictionary<string, UiWidget> _widgetPrefabDatabase;
+
         protected override void AwakeSingleton()
         {
             base.AwakeSingleton();
 
             _widgetDatabase = new();
         }
+
+
 
         protected virtual void Update()
         {
@@ -160,7 +167,7 @@ namespace Mineant.UI
         }
 
         /// <summary>
-        /// For resource mode, the ID would tbe the prefab's name.
+        /// For resource mode, the ID would tbe the prefab's name. For by type, will find if 
         /// </summary>
         /// <param name="widgetId"></param>
         /// <returns></returns>
@@ -168,7 +175,7 @@ namespace Mineant.UI
         {
             switch (WidgetPrefabStorageMode)
             {
-                case UiWidgetPrefabStorageMode.ResourceFolder:
+                case UiWidgetPrefabStorageMode.ResourceFolderByName:
                     {
                         GameObject go = Resources.Load<GameObject>(Path.Combine(PrefabResourceFolder, widgetId));
                         if (go == null)
