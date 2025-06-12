@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using System.IO;
+using Newtonsoft.Json;
 namespace Mineant.SaveSystem
 {
     public class FileDataHandler<TGameData> where TGameData : GameData
@@ -58,7 +59,7 @@ namespace Mineant.SaveSystem
                     }
 
                     // deserialize the data from Json back into the C# object
-                    loadedData = JsonUtility.FromJson<TGameData>(dataToLoad);
+                    loadedData = JsonConvert.DeserializeObject<TGameData>(dataToLoad, GetJsonSerializerSettings());
                 }
                 catch (Exception e)
                 {
@@ -103,7 +104,7 @@ namespace Mineant.SaveSystem
                 Directory.CreateDirectory(Path.GetDirectoryName(fullPath));
 
                 // serialize the C# game data object into Json
-                string dataToStore = JsonUtility.ToJson(data, true);
+                string dataToStore = JsonConvert.SerializeObject(data, GetJsonSerializerSettings());
 
                 // optionally encrypt the data
                 if (_useEncryption)
@@ -279,6 +280,13 @@ namespace Mineant.SaveSystem
             }
 
             return success;
+        }
+
+        public virtual JsonSerializerSettings GetJsonSerializerSettings()
+        {
+            JsonSerializerSettings settings = new JsonSerializerSettings();
+            settings.Formatting = Formatting.Indented;
+            return settings;
         }
     }
 
