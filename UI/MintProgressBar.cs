@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
+
 #if DOTWEEN
 using DG.Tweening;
 #endif
@@ -48,11 +50,18 @@ namespace Mineant
         [ContextMenu("Debug Set Value")]
         void DebugSetValue() => SetValue(DebugCurrent * (DebugMax - DebugMin) + DebugMin, DebugMin, DebugMax);
 
+        /// <summary>
+        /// Current, Max. This is adjusted, so Min is always 0.
+        /// </summary>
+        public Action<float, float> OnSetValue;
 
+        public float PreviousMaxValue => _previousMaxValue;
+        public float PreviousCurrentValue => _previousCurrentValue;
 
+        protected float _previousMaxValue = Mathf.NegativeInfinity;
         protected float _previousCurrentValue = Mathf.NegativeInfinity;
 
-        public void SetValue(float current, float min, float max)
+        public virtual void SetValue(float current, float min, float max)
         {
             float adjustedCurrent = current - min;
             float adjustedMax = max - min;
@@ -98,11 +107,14 @@ namespace Mineant
             }
 
             _previousCurrentValue = adjustedCurrent;
+            _previousCurrentValue = adjustedMax;
+
+            OnSetValue?.Invoke(adjustedCurrent, adjustedMax);
         }
 
-        public void SetValue(float current, float max) => SetValue(current, 0f, max);
+        public virtual void SetValue(float current, float max) => SetValue(current, 0f, max);
 
-        public void SetTextFieldActive(bool active, TextField textField)
+        public virtual void SetTextFieldActive(bool active, TextField textField)
         {
             switch (textField)
             {
