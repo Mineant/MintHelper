@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Mineant.Inventory
+namespace MioHelper.Inventory
 {
     public class InventoryDisplay : MonoBehaviour
     {
@@ -39,6 +39,8 @@ namespace Mineant.Inventory
 
         public void Generate(BaseInventory inventory)
         {
+            Container.BeginBatch();
+
             Container.DestroyAllProducts();
 
             Inventory = inventory;
@@ -50,6 +52,7 @@ namespace Mineant.Inventory
                 BaseGameItemUIProduct product = Container.GenerateNewProduct(new BaseGameItemUIProductArgs(inventory.GetContent()[i], i, this));
             }
 
+            Container.EndBatch();
         }
 
         void OnEnable()

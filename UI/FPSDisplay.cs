@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-namespace Mineant
+namespace MioHelper
 {
     public class FPSCounter : MonoBehaviour
     {

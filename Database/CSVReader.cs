@@ -15,7 +15,7 @@ using System.Collections;
 using System.Linq;
 
 
-namespace Mineant
+namespace MioHelper
 {
     public static class CSVReader 
     {

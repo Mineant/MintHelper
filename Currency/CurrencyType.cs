@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-namespace Mineant.Currency
+namespace MioHelper.Currency
 {
-    [CreateAssetMenu(menuName = "Mint Helper/Currency Type")]
+    [CreateAssetMenu(menuName = "Mio Helper/Currency Type")]
     public class CurrencyType : ScriptableObject
     {
         

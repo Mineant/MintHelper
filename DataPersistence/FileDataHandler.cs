@@ -4,7 +4,7 @@ using UnityEngine;
 using System;
 using System.IO;
 using Newtonsoft.Json;
-namespace Mineant.SaveSystem
+namespace MioHelper.SaveSystem
 {
     public class FileDataHandler<TGameData> where TGameData : GameData
     {

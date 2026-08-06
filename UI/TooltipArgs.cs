@@ -1,7 +1,7 @@
 
 using UnityEngine;
 
-namespace Mineant
+namespace MioHelper
 {
     public class TooltipArgs
     {

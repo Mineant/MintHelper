@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-namespace Mineant
+namespace MioHelper
 {
 
     public class NavigationWindowManager : MonoBehaviour
@@ -86,14 +86,14 @@ namespace Mineant
 
         private void ChangePage(int change)
         {
-            if (!CurrentNavWindows.IndexWithinRange(CurrentPage + change)) return;
+            if (CurrentPage + change < 0 || CurrentPage + change >= CurrentNavWindows.Count) return;
 
             OpenNav(CurrentPage + change);
         }
 
         public void OpenNav(int index)
         {
-            if (!CurrentNavWindows.IndexWithinRange(index))
+            if (index < 0 || index >= CurrentNavWindows.Count)
             {
                 Debug.LogWarning("Index is not within range, will just open the first menu");
                 index = 0;
@@ -127,7 +127,11 @@ namespace Mineant
                 if (nav.Window != null)
                 {
                     if (HideWithCanvasGroup)
-                        nav.Window.GetComponent<CanvasGroup>().EnableCanvasGroup(enable);
+                    {
+                        CanvasGroup canvasGroup = nav.Window.GetComponent<CanvasGroup>();
+                        canvasGroup.alpha = enable ? 1f : 0f;
+                        canvasGroup.blocksRaycasts = enable;
+                    }
                     else
                         nav.Window.gameObject.SetActive(enable);
                 }

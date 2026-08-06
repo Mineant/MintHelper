@@ -3,13 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
-using Mineant;
-using Mineant.Inventory;
+using MioHelper;
+using MioHelper.Inventory;
 using UnityEngine;
 using UnityEditor;
 
 #if UNITY_EDITOR
-namespace Mineant
+namespace MioHelper
 {
     public class DatabaseConverterManager : MonoBehaviour
     {
@@ -21,7 +21,7 @@ namespace Mineant
 
         private IEnumerator _RefreshAndGenerateDatabaseCoroutine()
         {
-            yield return EditorCoroutines.StartCoroutine(BobbinCore.Instance._StartRefresh(), this);
+            yield return EditorCoroutines.StartCoroutine(MioFetchCore.Instance._StartRefresh(), this);
             GenerateDatabase();
         }
 
@@ -32,7 +32,7 @@ namespace Mineant
 
             // Get the path to database first
             List<TextAsset> databases = new();
-            int found = Helpers.TryGetUnityObjectsOfTypeFromPath<TextAsset>("Assets/_Database/", databases);
+            int found = DatabaseAssetLoader.TryGetUnityObjectsOfTypeFromPath<TextAsset>("Assets/_Database/", databases);
 
             Debug.Log($"Found {found} Database");
             bool requireRecompile = false;

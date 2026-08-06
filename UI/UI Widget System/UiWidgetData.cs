@@ -1,10 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Mineant;
+using MioHelper;
 using UnityEngine;
 
-namespace Mineant.UI
+namespace MioHelper.UI
 {
     [System.Serializable]
     public abstract class UiWidgetData
@@ -21,7 +21,7 @@ namespace Mineant.UI
 
         public UiWidgetData()
         {
-            Id = Helpers.GetUniqueID();
+            Id = Guid.NewGuid().ToString();
             PivotType = UiPivotType.TopLeft;
             Position = Vector3.zero;
             CloseMode = UiWidgetCloseMode.CloseWhenMouseClickOutside;

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Mineant.SaveSystem
+namespace MioHelper.SaveSystem
 {
     public interface IDataPersistence<TGameData> where TGameData : GameData
     {

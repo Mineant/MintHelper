@@ -1,12 +1,47 @@
 {
-  "name": "com.mineant.minthelper",
+  "name": "com.mineant.miohelper",
   "version": "0.19.0",
-  "displayName": "Mint Helper",
-  "description": "USEFUL PACKAGES (Recommend to install)\nhttps://github.com/v0lt13/EditorAttributes.git\n\nABOUT\nThis package has scripts created by Mineant that are useful for all projects",
+  "displayName": "Mio Helper",
+  "description": "USEFUL PACKAGES (Recommend to install)\nhttps://github.com/v0lt13/EditorAttributes.git\n\nABOUT\nThis package has scripts created by MioHelper that are useful for all projects",
   "unity": "2019.1",
   "unityRelease": "0b5",
+  "samples": [
+    {
+      "displayName": "Inventory Example",
+      "description": "A complete inventory system demo with items, UI, buying/getting items, and a test scene.",
+      "path": "Samples~/Inventory Example"
+    },
+    {
+      "displayName": "Data Persistence Example",
+      "description": "Example showing how to extend the DataPersistence system with custom game data.",
+      "path": "Samples~/Data Persistence Example"
+    },
+    {
+      "displayName": "Ability System Example",
+      "description": "Example abilities, triggers and conditions built on the AbilitySystem. Includes AE_ShootProjectile, which integrates the projectile system.",
+      "path": "Samples~/Ability System Example"
+    },
+    {
+      "displayName": "Projectile System Example",
+      "description": "Self-bootstrapping projectile system demo (no scene assets): launches spread fans, shows the IProjectileHitHandler hit seam and the pool in action.",
+      "path": "Samples~/Projectile System Example"
+    },
+    {
+      "displayName": "Text Format Example",
+      "description": "Self-bootstrapping demo of the TextFormat module: the @{key} / {C:}/{N:}/{L:} template grammar shown raw vs formatted. No scene assets needed.",
+      "path": "Samples~/Text Format Example"
+    },
+    {
+      "displayName": "Tooltip Example",
+      "description": "Self-bootstrapping demo of the click + hover tooltip module: {L:} links in TMP text and hoverable panels open keyword-resolved tooltips with nested links, colors, and @{key} values. No scene assets needed.",
+      "path": "Samples~/Tooltip Example"
+    }
+  ],
+  "dependencies": {
+    "com.cysharp.unitask": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask"
+  },
   "author": {
-    "name": "Mineant",
+    "name": "MioHelper",
     "email": "kawaiianthony@gmail.com"
   }
 }

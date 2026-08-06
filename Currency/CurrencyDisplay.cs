@@ -1,27 +1,49 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-
-
-#if MOREMOUNTAINS_NICEVIBRATIONS_INSTALLED
-using MoreMountains.Tools;
-
-namespace Mineant.Currency
+namespace MioHelper.Currency
 {
-    public class CurrencyDisplay : MonoBehaviour, MMEventListener<CurrencyEvent>
+    /// <summary>
+    /// Displays one currency's icon + amount. With <see cref="AutoTrackCurrency"/> on, it
+    /// subscribes to <see cref="CurrencyManager.OnCurrencyChanged"/> while enabled and updates
+    /// whenever the tracked currency changes.
+    /// </summary>
+    public class CurrencyDisplay : MonoBehaviour
     {
         [Header("UI")]
         public Image IconImage;
         public TMP_Text ValueText;
 
         [Header("Auto")]
-        public bool AutoTrackCurrencyCurrency;
+        public bool AutoTrackCurrency;
         public CurrencyType CurrencyToTrack;
 
-        private CurrencyType _lastSetCurrency = null; // Set to a immpossible number
+        private CurrencyType _lastSetCurrency = null;
+
+        void OnEnable()
+        {
+            if (AutoTrackCurrency)
+            {
+                CurrencyManager.OnCurrencyChanged += HandleCurrencyChanged;
+            }
+        }
+
+        void OnDisable()
+        {
+            if (AutoTrackCurrency)
+            {
+                CurrencyManager.OnCurrencyChanged -= HandleCurrencyChanged;
+            }
+        }
+
+        private void HandleCurrencyChanged(CurrencyEvent currencyEvent)
+        {
+            if (CurrencyToTrack == currencyEvent.CurrencyType)
+            {
+                Generate(currencyEvent.CurrencyType, currencyEvent.Amount);
+            }
+        }
 
         public void Generate(CurrencyField currencyField)
         {
@@ -30,34 +52,18 @@ namespace Mineant.Currency
 
         public void Generate(CurrencyType currencyType, int amount)
         {
-            if (_lastSetCurrency == null || currencyType != _lastSetCurrency)
+            if (IconImage != null && (_lastSetCurrency == null || currencyType != _lastSetCurrency))
             {
-                IconImage.sprite = CurrencyManager.Instance.CurrencyIconTable[currencyType];
+                if (CurrencyManager.Instance != null && CurrencyManager.Instance.CurrencyIconTable != null
+                    && CurrencyManager.Instance.CurrencyIconTable.TryGetValue(currencyType, out Sprite icon))
+                {
+                    IconImage.sprite = icon;
+                }
             }
 
-            ValueText.text = amount + "";
+            if (ValueText != null) ValueText.text = amount + "";
 
             _lastSetCurrency = currencyType;
         }
-
-        public void OnMMEvent(CurrencyEvent eventType)
-        {
-            if (CurrencyToTrack == eventType.CurrencyType)
-            {
-                Generate(eventType.CurrencyType, eventType.Amount);
-            }
-        }
-
-        void OnEnable()
-        {
-            if (AutoTrackCurrencyCurrency) this.MMEventStartListening<CurrencyEvent>();
-        }
-
-        void OnDisable()
-        {
-            if (AutoTrackCurrencyCurrency) this.MMEventStopListening<CurrencyEvent>();
-        }
     }
-
 }
-#endif

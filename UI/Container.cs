@@ -5,50 +5,55 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Mineant
+namespace MioHelper
 {
-    public abstract class Container : MonoBehaviour
+    public abstract class Container<TProduct, TArgs> : MonoBehaviour where TProduct : Product<TArgs> where TArgs : ProductArgs
     {
-        public Action OnContentChanged; // This will only be called if the products are modified by the container. If the product is directly show/hide by the user, then this will not trigger.F
-        private const int HI = 1;   // added this here to let VSCode show references of vairables. fk vscode
-
-    }
-
-    public abstract class Container<TProduct, TArgs> : Container where TProduct : Product<TArgs> where TArgs : ProductArgs
-    {
-        [Tooltip("Products are created under this transofrm.")]
+        [Tooltip("Products are created under this transform.")]
         public Transform ProductLocation;
 
-        [Tooltip("The product the pool")]
+        [Tooltip("The product prefab for the pool")]
         public TProduct ProductPrefab;
 
         public int DefaultSize = 0;
 
-        [Tooltip("Destroys the gameObjects under the targetted transform.")]
+        [Tooltip("Destroys the gameObjects under the targeted transform on start.")]
         public bool DestroyOnStart = true;
 
-        [Tooltip("Add products under the container at start to created products.")]
+        [Tooltip("Add products already placed under the container at start to the pool.")]
         public bool AddExistingProducts;
         public bool AutoUpdateLayout;
 
-        [Tooltip("Uses canvas group and layout element to show products, instead of activate / deactivate the products. This is useful activing and deactivating the gameobject consumes a lot of power.")]
+        [Tooltip("Uses canvas group and layout element to show products, instead of activate/deactivate. Useful when activating/deactivating GameObjects is expensive.")]
         public ProductActiveMode ActiveMode = ProductActiveMode.GameObject;
 
         [Header("Advanced")]
-        [Tooltip("if a toggle group can be found on this object, then if products hv toggle group, will automatically assign.")]
+        [Tooltip("If a ToggleGroup is found on this object, automatically assigns it to products with toggles.")]
         public bool AutoSetProductToggleGroup;
 
-        [Tooltip("Will set all product to this scale if > 0f.")]
+        [Tooltip("Sets all products to this scale if > 0.")]
         public float CustomScale = -1f;
 
-        [Tooltip("If other scripts will reorder the products inside this container, for example, moave the products to another parent, or change the sibling index, enabling this will reorder the products, so get active products will get the products correctly by their index.")]
+        [Tooltip("If other scripts reorder products inside this container (e.g. drag-and-drop), enabling this re-sorts the pool list by sibling index so GetActiveProducts returns products in the correct order.")]
         public bool AutoReorderProducts;
 
-        protected List<TProduct> _createProducts;
+        /// <summary>
+        /// Fires after products are added/removed. Carries a read-only snapshot of currently active products.
+        /// Subscribers never need to call GetActiveProducts themselves.
+        /// </summary>
+        public event Action<IReadOnlyList<TProduct>> ContentChanged;
 
-        protected TProduct _createdProduct;
-        private int _containerUpdated = 0;
-        public static int LAYOUT_UPDATE_FRAMES = 5;
+        protected List<TProduct> _createProducts;
+        private List<TProduct> _activeProductsSnapshot = new();
+        private int _batchDepth = 0;
+        private int _layoutUpdateFramesRemaining = 0;
+        protected const int LAYOUT_UPDATE_FRAMES = 5;
+
+        /// <summary>
+        /// Returns a read-only snapshot of currently active products. Zero-allocation — backed by an internal cached list.
+        /// </summary>
+        public IReadOnlyList<TProduct> ActiveProducts => _activeProductsSnapshot;
+
         public CanvasGroup CanvasGroup { get; protected set; }
         public LayoutGroup LayoutGroup { get; protected set; }
         public ToggleGroup ToggleGroup { get; protected set; }
@@ -69,9 +74,9 @@ namespace Mineant
             LayoutGroup = ProductLocation.GetComponent<LayoutGroup>();
             ToggleGroup = GetComponent<ToggleGroup>();
             CanvasGroup = GetComponent<CanvasGroup>();
-            if (AutoSetProductToggleGroup && ToggleGroup == null) Debug.LogError("Cannot auto set toggle group if no toggle grup at container.");
+            if (AutoSetProductToggleGroup && ToggleGroup == null) Debug.LogError("Cannot auto set toggle group if no ToggleGroup on container.");
             if (ProductLocation == null) ProductLocation = this.transform;
-            if (DestroyOnStart & AddExistingProducts) Debug.LogError("Cannot destroy existing products while trying to add existing products.");
+            if (DestroyOnStart && AddExistingProducts) Debug.LogError("Cannot destroy existing products while trying to add existing products.");
             if (DestroyOnStart)
             {
                 foreach (Transform child in ProductLocation)
@@ -111,17 +116,41 @@ namespace Mineant
             CreatePool();
         }
 
-        protected virtual void LateUpdate()
+        /// <summary>
+        /// Begin a batch operation. Events and layout updates are suppressed until EndBatch is called.
+        /// Supports nesting — only the outermost EndBatch fires events.
+        /// </summary>
+        public virtual void BeginBatch()
         {
-            // Update the container.
-            if (_containerUpdated > 0)
+            _batchDepth++;
+        }
+
+        /// <summary>
+        /// End a batch operation. Fires ContentChanged and schedules layout rebuild once for the entire batch.
+        /// </summary>
+        public virtual void EndBatch()
+        {
+            if (_batchDepth <= 0)
             {
-                _containerUpdated--;
-                if (AutoUpdateLayout) UpdateLayoutGroup();
+                Debug.LogWarning("EndBatch called without matching BeginBatch.");
+                return;
+            }
+
+            _batchDepth--;
+            if (_batchDepth == 0)
+            {
+                _FireContentChanged();
             }
         }
 
-
+        protected virtual void LateUpdate()
+        {
+            if (_layoutUpdateFramesRemaining > 0)
+            {
+                _layoutUpdateFramesRemaining--;
+                if (AutoUpdateLayout) UpdateLayoutGroup();
+            }
+        }
 
         protected virtual void CreatePool()
         {
@@ -133,43 +162,40 @@ namespace Mineant
 
         protected virtual TProduct CreateNewProduct()
         {
-            _createdProduct = Instantiate(ProductPrefab, ProductLocation);
-            _createdProduct.Initialize(ActiveMode);
-            _createProducts.Add(_createdProduct);
-            _createdProduct.Hide();
-            _createdProduct.gameObject.name = $"{_createdProduct.gameObject.name}_{_createProducts.Count}";
+            TProduct createdProduct = Instantiate(ProductPrefab, ProductLocation);
+            createdProduct.Initialize(ActiveMode);
+            _createProducts.Add(createdProduct);
+            createdProduct.Hide();
+            createdProduct.gameObject.name = $"{createdProduct.gameObject.name}_{_createProducts.Count}";
 
-            if (AutoSetProductToggleGroup && ToggleGroup != null && _createdProduct.ProductToggle != null)
+            if (AutoSetProductToggleGroup && ToggleGroup != null && createdProduct.ProductToggle != null)
             {
-                _createdProduct.ProductToggle.group = ToggleGroup;
+                createdProduct.ProductToggle.group = ToggleGroup;
             }
 
             if (CustomScale > 0f)
             {
-                _createdProduct.transform.localScale = Vector3.one * CustomScale;
+                createdProduct.transform.localScale = Vector3.one * CustomScale;
             }
 
-            return _createdProduct;
+            return createdProduct;
         }
 
-
-
         /// <summary>
-        /// Returns the next unused product. 
+        /// Returns the next unused product. Auto-expands the pool if all are active.
         /// </summary>
-        public virtual TProduct GetNextProduct()
+        protected virtual TProduct GetNextProduct()
         {
             if (AutoReorderProducts) ReorderCreatedProducts();
             for (int i = 0; i < _createProducts.Count; i++)
             {
                 if (!IsProductActive(_createProducts[i]))
                 {
-                    // if we find one, we return it
                     return _createProducts[i];
                 }
             }
 
-            // if we haven't found an inactive object (the pool is empty), and if we can extend it, we add one new object to the pool, and return it		 
+            // Pool exhausted — expand it
             return CreateNewProduct();
         }
 
@@ -183,14 +209,12 @@ namespace Mineant
                     return product.CanvasGroup.alpha > 0f;
             }
 
-            Debug.LogError("???");
+            Debug.LogError("Unknown ProductActiveMode");
             return false;
         }
 
-
-
         /// <summary>
-        /// Gets a new product, new generates it
+        /// Generates a new product from the pool, configures it with the given args, and shows it.
         /// </summary>
         public virtual TProduct GenerateNewProduct(TArgs args, Action<TProduct> onInteract = null)
         {
@@ -199,27 +223,28 @@ namespace Mineant
             TProduct product = GetNextProduct();
             product.Generate(args);
 
-            _containerUpdated = LAYOUT_UPDATE_FRAMES;
-
-            if (OnContentChanged != null) OnContentChanged.Invoke();
+            if (_batchDepth == 0)
+            {
+                _FireContentChanged();
+            }
 
             if (onInteract != null)
             {
-                product.OnInteract((x)=> { onInteract.Invoke((TProduct)x); });
+                product.OnInteract((x) => { onInteract.Invoke((TProduct)x); });
             }
 
             return product;
         }
 
-
-
         /// <summary>
-        /// Hides all previous products and generates completely new ones with the args.
+        /// Hides all previous products and generates new ones from the args list.
+        /// The entire operation fires ContentChanged once.
         /// </summary>
         public virtual List<TProduct> DestroyAndGenerateNewProducts(IEnumerable<TArgs> argsList, Action<TProduct> onInteract = null)
         {
-            List<TProduct> products = new();
+            BeginBatch();
 
+            List<TProduct> products = new();
             DestroyAllProducts();
 
             foreach (TArgs args in argsList)
@@ -227,9 +252,13 @@ namespace Mineant
                 products.Add(GenerateNewProduct(args, onInteract));
             }
 
+            EndBatch();
             return products;
         }
 
+        /// <summary>
+        /// Hides all products (returns them to the pool without destroying).
+        /// </summary>
         public virtual void DestroyAllProducts()
         {
             Init();
@@ -239,41 +268,47 @@ namespace Mineant
                 product.Hide();
             }
 
-            if (OnContentChanged != null) OnContentChanged.Invoke();
+            if (_batchDepth == 0)
+            {
+                _FireContentChanged();
+            }
         }
 
         /// <summary>
-        /// This is very costly to do. Cache it. Do not do it every frame.
+        /// Sometimes, if the elements inside the container are reordered by other UI elements,
+        /// the container will track products incorrectly. Reordering fixes this.
         /// </summary>
-        /// <returns></returns>
-        public virtual List<TProduct> GetActiveProducts()
+        protected virtual void ReorderCreatedProducts()
         {
             Init();
-
-            if (AutoReorderProducts) ReorderCreatedProducts();
-            return _createProducts.Where(p => IsProductActive(p)).ToList();
-        }
-
-        /// <summary>
-        /// Sometimes, if the elements in the conainer are reordered by other UI elements, the container will function wrongly, reordering it should fix problems
-        /// </summary>
-        public virtual void ReorderCreatedProducts()
-        {
-            Init();
-
             _createProducts = _createProducts.OrderBy(p => p.transform.GetSiblingIndex()).ToList();
         }
 
         /// <summary>
-        // If Container has a layout group component, can use this function to update.
+        /// If the container has a LayoutGroup, forces an immediate layout rebuild.
+        /// Called automatically by the deferred layout update system.
         /// </summary>
-        public virtual void UpdateLayoutGroup()
+        protected virtual void UpdateLayoutGroup()
         {
             if (LayoutGroup == null) return;
             LayoutRebuilder.ForceRebuildLayoutImmediate(LayoutGroup.transform as RectTransform);
         }
+
+        private void _FireContentChanged()
+        {
+            // Rebuild the active snapshot
+            if (AutoReorderProducts) ReorderCreatedProducts();
+            _activeProductsSnapshot.Clear();
+            for (int i = 0; i < _createProducts.Count; i++)
+            {
+                if (IsProductActive(_createProducts[i]))
+                {
+                    _activeProductsSnapshot.Add(_createProducts[i]);
+                }
+            }
+
+            _layoutUpdateFramesRemaining = LAYOUT_UPDATE_FRAMES;
+            ContentChanged?.Invoke(_activeProductsSnapshot);
+        }
     }
-
-
-
 }

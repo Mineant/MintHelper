@@ -1,18 +1,17 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using System.Linq;
+using UnityEngine;
 
-
-
-#if MOREMOUNTAINS_NICEVIBRATIONS_INSTALLED
-using MoreMountains.Tools;
-
-namespace Mineant.Currency
+namespace MioHelper.Currency
 {
+    /// <summary>
+    /// Persistent currency store. Place one instance in the scene (usually a boot scene).
+    /// Amounts are keyed by <see cref="CurrencyType"/> ScriptableObjects. Any change fires
+    /// <see cref="OnCurrencyChanged"/> so <see cref="CurrencyDisplay"/> UIs can auto-update.
+    /// </summary>
     [DefaultExecutionOrder(-100)]
-    public class CurrencyManager : MMPersistentSingleton<CurrencyManager>
+    public class CurrencyManager : Singleton<CurrencyManager>
     {
         [Header("Currency Manager")]
         [Tooltip("All currency types that will be used in this project.")]
@@ -25,6 +24,8 @@ namespace Mineant.Currency
         [Range(0f, 999f)]
         public int DebugCurrencyAmount;
 
+        /// <summary>Fired whenever a currency amount is set: (currencyType, newAmount).</summary>
+        public static event Action<CurrencyEvent> OnCurrencyChanged;
 
         [ContextMenu("Debug Change Currency")]
         void DebugChangeCurrency() => ChangeCurrency(DebugCurrencyType, DebugCurrencyAmount);
@@ -34,6 +35,9 @@ namespace Mineant.Currency
         protected override void Awake()
         {
             base.Awake();
+
+            // Persist across scene loads (matches the former MMPersistentSingleton behavior).
+            DontDestroyOnLoad(gameObject);
 
             // Initialize the dictionary
             _currencyTable = new Dictionary<CurrencyType, int>();
@@ -55,7 +59,6 @@ namespace Mineant.Currency
         }
 
 
-
         public void SetCurrency(CurrencyField currencyField)
         {
             SetCurrency(currencyField.CurrencyType, currencyField.Amount);
@@ -64,9 +67,8 @@ namespace Mineant.Currency
         public void SetCurrency(CurrencyType currencyType, int amount)
         {
             _currencyTable[currencyType] = amount;
-            CurrencyEvent.Trigger(currencyType, amount);
+            OnCurrencyChanged?.Invoke(new CurrencyEvent(currencyType, amount));
         }
-
 
 
         public bool EnoughCurrency(CurrencyField currencyField)
@@ -76,9 +78,13 @@ namespace Mineant.Currency
 
         public bool EnoughCurrency(CurrencyType currencyType, int amount)
         {
-            return _currencyTable[currencyType] >= amount;
+            return _currencyTable.TryGetValue(currencyType, out int current) && current >= amount;
         }
 
+        public int GetCurrencyAmount(CurrencyType currencyType)
+        {
+            return _currencyTable.TryGetValue(currencyType, out int amount) ? amount : 0;
+        }
 
 
         public CurrencyType GetCurrencyType(string name) => CurrencyTypes.First(c => c.name == name);
@@ -88,6 +94,9 @@ namespace Mineant.Currency
     public class CurrencyTypeSpriteDictionary : UnitySerializedDictionary<CurrencyType, Sprite> { }
 
 
+    /// <summary>
+    /// Payload describing one currency change. Kept as a plain struct (no framework event bus).
+    /// </summary>
     public struct CurrencyEvent
     {
         public CurrencyType CurrencyType;
@@ -105,16 +114,6 @@ namespace Mineant.Currency
             CurrencyType = currencyType;
             Amount = amount;
         }
-
-        static CurrencyEvent e;
-
-        public static void Trigger(CurrencyType currencyType, int amount)
-        {
-            e.CurrencyType = currencyType;
-            e.Amount = amount;
-
-            MMEventManager.TriggerEvent(e);
-        }
     }
 
     [System.Serializable]
@@ -129,5 +128,3 @@ namespace Mineant.Currency
         }
     }
 }
-
-#endif

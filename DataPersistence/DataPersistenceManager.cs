@@ -4,7 +4,7 @@ using UnityEngine;
 using System.Linq;
 using UnityEngine.SceneManagement;
 
-namespace Mineant.SaveSystem
+namespace MioHelper.SaveSystem
 {
     public class DataPersistenceManager<TManager, TDataPersistence, TFileDataHandler, TGameData> : MonoBehaviour
         where TManager : DataPersistenceManager<TManager, TDataPersistence, TFileDataHandler, TGameData>

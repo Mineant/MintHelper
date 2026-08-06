@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Mineant.UI
+namespace MioHelper.UI
 {
     [RequireComponent(typeof(Button))]
     public class CloseUiWidgetButton : MonoBehaviour

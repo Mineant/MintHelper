@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEngine;
 using System;
 
-namespace Mineant.Inventory
+namespace MioHelper.Inventory
 {
     public abstract class BaseInventory : MonoBehaviour
     {

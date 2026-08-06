@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Mineant.Inventory
+namespace MioHelper.Inventory
 {
 
 
-    [CreateAssetMenu(menuName = "Mint Helper/Inventory/Inventory Item")]
+    [CreateAssetMenu(menuName = "Mio Helper/Inventory/Inventory Item")]
     public class InventoryItem : BaseItem
     {
         public override BaseGameItem CreateBaseGameInstance()

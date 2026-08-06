@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-namespace Mineant
+namespace MioHelper
 {
 
     public abstract class Product : MonoBehaviour

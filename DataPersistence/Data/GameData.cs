@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Mineant.SaveSystem
+namespace MioHelper.SaveSystem
 {
     [System.Serializable]
     public class GameData

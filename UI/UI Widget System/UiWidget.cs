@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace Mineant.UI
+namespace MioHelper.UI
 {
     public abstract class UiWidget : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {

@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEngine;
 
 
-namespace Mineant
+namespace MioHelper
 {
     public static class DatabaseExtensions
     {

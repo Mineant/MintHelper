@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Runtime.Serialization;
 using UnityEngine;
 
-namespace Mineant
+namespace MioHelper
 {
 	public abstract class UnitySerializedDictionary<TKey, TValue> : Dictionary<TKey, TValue>, ISerializationCallbackReceiver
 	{
@@ -33,10 +33,5 @@ namespace Mineant
 				this.valueData.Add(item.Value);
 			}
 		}
-	}
-
-	[System.Serializable]
-	public class StringIntDictionary : UnitySerializedDictionary<string, int>
-	{
 	}
 }

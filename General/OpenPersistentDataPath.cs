@@ -5,11 +5,11 @@ using System.Diagnostics;
 using UnityEditor;
 using UnityEngine;
 
-namespace Mineant
+namespace MioHelper
 {
     public static class OpenPersistentDataPath
     {
-        [MenuItem("Mineant/Open Persistent Data Path")]
+        [MenuItem("MioHelper/Open Persistent Data Path")]
         public static void OpenPersistentDataPaths()
         {
             Process process = new Process();

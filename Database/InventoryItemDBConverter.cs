@@ -1,13 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Mineant;
-using Mineant.Inventory;
+using MioHelper;
+using MioHelper.Inventory;
 using UnityEditor;
 using UnityEngine;
 
 #if UNITY_EDITOR
-namespace Mineant
+namespace MioHelper
 {
     public class InventoryItemDBConverter : ItemDBConverter<InventoryItem>
     {
@@ -33,7 +33,7 @@ namespace Mineant
         protected override bool FindExistingItem(string[,] database, int index, out InventoryItem item)
         {
             List<InventoryItem> items = new();
-            Helpers.TryGetUnityObjectsOfTypeFromPath<InventoryItem>(GetExportPath(), items);
+            DatabaseAssetLoader.TryGetUnityObjectsOfTypeFromPath<InventoryItem>(GetExportPath(), items);
             item = items.FirstOrDefault(item => item.ItemID == database[0, index]);
             return item != null;
         }

@@ -5,7 +5,7 @@
 
 using UnityEngine;
 using UnityEngine.UI;
-namespace Mineant
+namespace MioHelper
 {
     public class FlexibleGridLayout : LayoutGroup
     {

@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEngine;
 
 
-namespace Mineant.TwoD
+namespace MioHelper.TwoD
 {
     public class SpriteAnimator : MonoBehaviour
     {

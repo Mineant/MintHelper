@@ -2,12 +2,12 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Mineant;
+using MioHelper;
 using UnityEditor;
 using UnityEngine;
 
 #if UNITY_EDITOR
-namespace Mineant
+namespace MioHelper
 {
 
     public abstract class ItemDBConverter : MonoBehaviour

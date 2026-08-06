@@ -5,7 +5,7 @@ using System.IO;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace Mineant.UI
+namespace MioHelper.UI
 {
     public class UiWidgetManager : Singleton<UiWidgetManager>
     {

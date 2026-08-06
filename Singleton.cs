@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Mineant
+namespace MioHelper
 {
     public class Singleton<T> : MonoBehaviour where T : Singleton<T>
     {

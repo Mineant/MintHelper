@@ -2,20 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Mineant.Inventory
+namespace MioHelper.Inventory
 {
     [System.Serializable]
     public abstract class BaseGameItem
     {
         public int Quantity;
 
-        [SerializeField]
-        protected BaseItem _baseParent;
-
         protected BaseGameItem()
         {
             Quantity = 1;
-            _baseParent = null;
         }
 
         public abstract BaseItem GetBaseParent();
@@ -35,7 +31,6 @@ namespace Mineant.Inventory
         public BaseGameItem(TItem parent)
         {
             _parent = parent;
-            _baseParent = parent;
         }
 
         public override BaseItem GetBaseParent()

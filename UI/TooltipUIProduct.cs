@@ -1,11 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
-using Mineant;
+using MioHelper;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Mineant
+namespace MioHelper
 {
     public class TooltipUIProduct : Product<TooltipProductArgs>
     {
