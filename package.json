@@ -7,11 +7,6 @@
   "unityRelease": "0b5",
   "samples": [
     {
-      "displayName": "Inventory Example",
-      "description": "A complete inventory system demo with items, UI, buying/getting items, and a test scene.",
-      "path": "Samples~/Inventory Example"
-    },
-    {
       "displayName": "Data Persistence Example",
       "description": "Example showing how to extend the DataPersistence system with custom game data.",
       "path": "Samples~/Data Persistence Example"
@@ -35,6 +30,16 @@
       "displayName": "Tooltip Example",
       "description": "Self-bootstrapping demo of the click + hover tooltip module: {L:} links in TMP text and hoverable panels open keyword-resolved tooltips with nested links, colors, and @{key} values. No scene assets needed.",
       "path": "Samples~/Tooltip Example"
+    },
+    {
+      "displayName": "Stat System Example",
+      "description": "Self-bootstrapping demo of the Stat System module: MioStatSheet parent-table inheritance, the per-key versioned cache, source-based removal, and live in-place StatModifier writes. No scene assets needed.",
+      "path": "Samples~/Stat System Example"
+    },
+    {
+      "displayName": "Character Example",
+      "description": "Self-bootstrapping demo composing a character from the package seams: SampleCharacter (IAbilityOwner/ISelectable/ITeamMember) + MioStatSheet + CharacterAbilityModule + SampleHealth (IProjectileHitHandler) + SampleMovement, firing projectiles at a target until it dies. No scene assets needed.",
+      "path": "Samples~/Character Example"
     }
   ],
   "dependencies": {
